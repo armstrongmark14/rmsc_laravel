@@ -25,21 +25,31 @@ class Volunteer extends Model
         'emergency_phone',
     ];
 
-    public function badge()
-    {
-        return $this->belongsTo('App\Model\Volunteer\Badge');
-    }
-
+    /**
+     * Gets the type of this particular volunteer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo - The type of that volunteer
+     */
     public function type()
     {
         return $this->belongsTo('App\Model\Volunteer\Type');
     }
 
+    /**
+     * Gets the department of this particular volunteer
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo - The department of this volunteer
+     */
     public function department()
     {
         return $this->belongsTo('App\Model\Volunteer\Department');
     }
 
+    /**
+     * Gets the photo for a particular volunteer - Many volunteers can have the same photo (default.png)
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\BelongsTo - The photo for this volunteer
+     */
     public function photo()
     {
         return $this->belongsTo('App\Model\Volunteer\Photo');
