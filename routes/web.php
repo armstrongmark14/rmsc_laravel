@@ -50,3 +50,7 @@ Route::get('/admin/home', array('as' => 'admin-home', 'uses' => 'Admin\AdminCont
 // Full volunteer List
 Route::get('/admin/volunteer-list', array('as' => 'admin-volunteer-list', 'uses' => 'Admin\AdminController@fullVolunteerList'));
 
+// Currently Here volunteer list
+Route::get('/admin/volunteers-here', ['as' => 'volunteers-here' , 'uses' => 'Admin\AdminController@currentlyHere']);
+
+Route::get('admin/volunteer/{id}/profile', ['as' => 'volunteer-profile', 'uses' => 'Admin\AdminController@volunteerProfile']);

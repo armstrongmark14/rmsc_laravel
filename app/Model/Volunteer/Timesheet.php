@@ -17,7 +17,7 @@ class Timesheet extends Model
      */
     public function volunteer()
     {
-        return $this->hasOne('App\Model\Volunteer\Volunteer');
+        return $this->belongsTo('App\Model\Volunteer\Volunteer');
     }
 
     /**
