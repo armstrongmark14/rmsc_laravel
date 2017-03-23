@@ -3,11 +3,11 @@
 namespace App\Model\Volunteer;
 
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Support\Facades\DB;
 
 class Volunteer extends Model
 {
-    //
-
+    // These are the fields that can be edited and changed
     protected $fillable = [
         'badge_id',
         'department_id',
@@ -24,6 +24,8 @@ class Volunteer extends Model
         'emergency_contact',
         'emergency_phone',
     ];
+
+
 
     /**
      * @return array - [0] is boolean value whether they have open timesheet or not
@@ -45,6 +47,21 @@ class Volunteer extends Model
     private function getLatestTimesheet()
     {
         return $this->timesheets()->orderBy('in', 'ASC')->first();
+    }
+
+    /**
+     * Had to use a raw query because getting the difference was looking too hard with Eloquent here.
+     * Gets the total hours this volunteer has.
+     *
+     * @return mixed Will return the a decimal number of hours this volunteer has
+     */
+    public function totalHours()
+    {
+        $totalHours = DB::table('timesheets')
+            ->select(DB::raw('ROUND(SUM(TIMESTAMPDIFF(MINUTE, timesheets.in, timesheets.out) / 60), 2) as hours'))
+            ->where('volunteer_id', '=', $this->id)
+            ->get();
+        return $totalHours[0]->hours;
     }
 
     /**

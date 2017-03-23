@@ -58,7 +58,7 @@
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <li class="navLink navLast">
-                    {{--<a href="{{ route('admin-login') }}">--}}
+                    <a href="{{ route('admin-login') }}">
                         <i class="fa fa-lock" aria-hidden="true"></i>
                         <span class="navText">Admin Login</span>
                     </a>

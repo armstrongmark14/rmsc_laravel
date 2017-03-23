@@ -20,12 +20,11 @@ class VolunteerController extends Controller
      */
     public function profile()
     {
-        if (! session()->has('volunteer') || session()->has('volunteer-logged-in')) {
+        if (! session()->has('volunteer-logged-in')) {
             return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 2]);
         }
         // First pulling and deleting the volunteer from the login session and moving it to the logged-in session
-        $volunteer = session()->pull('volunteer');
-        session()->put('volunteer-logged-in', $volunteer);
+        $volunteer = session('volunteer-logged-in');
         $openTimesheet = $volunteer->hasOpenTimesheet();
         return view('volunteer.profile', compact('volunteer', 'openTimesheet'));
     }
@@ -37,6 +36,9 @@ class VolunteerController extends Controller
      */
     public function viewTimesheets()
     {
+        if (! session()->has('volunteer-logged-in')) {
+            return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 2]);
+        }
         $volunteer = session('volunteer-logged-in');
         $timesheets = Volunteer::find($volunteer->badge)->timesheets;
         return view('volunteer.time.timesheets', compact('volunteer', 'timesheets'));

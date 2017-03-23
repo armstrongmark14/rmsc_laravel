@@ -20,7 +20,7 @@ class LoginController extends Controller
     {
         // If the user returned here and was logged in, we need to delete their session
         session()->forget('volunteer-logged-in');
-
+        session()->forget('admin-logged-in');
         return view('login.home-login');
     }
 
@@ -36,7 +36,7 @@ class LoginController extends Controller
         if (! $volunteer = Volunteer::find($request->badge)) {
             return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 1]);
         }
-        session()->put('volunteer', $volunteer);
+        session()->put('volunteer-logged-in', $volunteer);
         return redirect()->action('Volunteer\VolunteerController@profile');
     }
 
