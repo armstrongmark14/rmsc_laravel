@@ -18,7 +18,7 @@ class LoginController extends Controller
      */
     public function loginPage()
     {
-        return view('templates.login.home-login');
+        return view('login.home-login');
     }
 
     /**
@@ -27,8 +27,21 @@ class LoginController extends Controller
      * @param Request $request - The form data containing the badge # from login form
      * @return mixed
      */
-    public function volunteer(Request $request)
+    public function loginSuccess(Request $request)
     {
-        return Volunteer::find($request->badge);
+        // Saves the badge input into a session variable and redirects to the profile
+        session()->put('badge', $request->badge);
+        return redirect()->action('Volunteer\LoginController@profile');
+
+    }
+
+    public function profile()
+    {
+        if (! session()->has('badge') || !$volunteer = Volunteer::find(session('badge'))) {
+            session()->flash('login-status', 'Please enter a badge number.');
+            return redirect('/');
+        }
+        session()->forget('badge');
+        return view('volunteer.profile', compact('volunteer'));
     }
 }
