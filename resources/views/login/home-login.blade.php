@@ -9,12 +9,14 @@
     @endif
 
     @if( Session::has('timeclock'))
-        <div class="alert alert-info col-sm-4 col-sm-offset-4 disappear">
+        <div class="alert alert-info col-sm-6 col-sm-offset-3 disappear">
             {{ Session::get('timeclock') }}
         </div>
-        <script>$('.disappear').delay(7000).queue(function(){
+        <script>
+            $('.disappear').delay(7000).queue(function(){
                 $(this).addClass("hidden");
-            });</script>
+            });
+        </script>
     @endif
 
 
@@ -22,7 +24,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">Volunteer Login</div>
             <div class="panel-body">
-                {!! Form::open(['method' => 'POST', 'action' => 'Volunteer\LoginController@loginSuccess']) !!}
+                {!! Form::open(['method' => 'POST', 'action' => 'Volunteer\LoginController@loginCheck']) !!}
 
                 <div class="form-group col-xs-8 col-xs-offset-2">
                     {!! Form::label('badge', 'Badge Number:') !!}

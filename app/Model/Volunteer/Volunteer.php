@@ -26,6 +26,28 @@ class Volunteer extends Model
     ];
 
     /**
+     * @return array - [0] is boolean value whether they have open timesheet or not
+     *                 [1] is the timesheet if exists or null if it doesn't
+     */
+    public function hasOpenTimesheet()
+    {
+        $time = $this->getLatestTimesheet();
+        if (strcmp($time['in'], $time['out']) == 0
+            && strcmp(substr($time['in'], 0, 10), Timesheet::now()->format('Y-m-d')) == 0) {
+            return [true, $time]; // Returning true and the timesheet we wanted to edit
+        }
+        return [false, null]; // Else return false and no timesheet
+    }
+
+    /**
+     * @return the latest timesheet this volunteer has in our database
+     */
+    private function getLatestTimesheet()
+    {
+        return $this->timesheets()->orderBy('in', 'ASC')->first();
+    }
+
+    /**
      * Gets the type of this particular volunteer
      *
      * @return \Illuminate\Database\Eloquent\Relations\BelongsTo - The type of that volunteer
@@ -53,5 +75,15 @@ class Volunteer extends Model
     public function photo()
     {
         return $this->belongsTo('App\Model\Volunteer\Photo');
+    }
+
+    /**
+     * Will get all the timesheets a volunteer has.
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany - All timesheets a volunteer has
+     */
+    public function timesheets()
+    {
+        return $this->hasMany('App\Model\Volunteer\Timesheet')->orderBy('in', 'DESC');
     }
 }

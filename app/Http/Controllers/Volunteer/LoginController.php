@@ -18,6 +18,9 @@ class LoginController extends Controller
      */
     public function loginPage()
     {
+        // If the user returned here and was logged in, we need to delete their session
+        session()->forget('volunteer-logged-in');
+
         return view('login.home-login');
     }
 
@@ -27,21 +30,38 @@ class LoginController extends Controller
      * @param Request $request - The form data containing the badge # from login form
      * @return mixed
      */
-    public function loginSuccess(Request $request)
+    public function loginCheck(Request $request)
     {
-        // Saves the badge input into a session variable and redirects to the profile
-        session()->put('badge', $request->badge);
-        return redirect()->action('Volunteer\LoginController@profile');
-
-    }
-
-    public function profile()
-    {
-        if (! session()->has('badge') || !$volunteer = Volunteer::find(session('badge'))) {
-            session()->flash('login-status', 'Please enter a badge number.');
-            return redirect('/');
+        // Checks to see if the badge is a valid #, then redirects if no/yes
+        if (! $volunteer = Volunteer::find($request->badge)) {
+            return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 1]);
         }
-        session()->forget('badge');
-        return view('volunteer.profile', compact('volunteer'));
+        session()->put('volunteer', $volunteer);
+        return redirect()->action('Volunteer\VolunteerController@profile');
     }
+
+    /**
+     * This function will handle redirecting to the login page after a login failure, or
+     * other conditions that would lead to a user being redirected back to the homepage.
+     *
+     * @param $id - The id # of the error message we'll display to the user
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector - always redirects to homepage
+     */
+    public function loginFailure($id)
+    {
+        $message = '';
+        switch ($id) {
+            case 1:
+                $message = 'Please enter a badge number.';
+                break;
+            case 2:
+                $message = 'You must re-enter your badge number to access that page.';
+                break;
+        }
+
+        session()->flash('login-status', $message);
+        return redirect('/');
+    }
+
+
 }
