@@ -53,4 +53,7 @@ Route::get('/admin/volunteer-list', array('as' => 'admin-volunteer-list', 'uses'
 // Currently Here volunteer list
 Route::get('/admin/volunteers-here', ['as' => 'volunteers-here' , 'uses' => 'Admin\AdminController@currentlyHere']);
 
+// Showing a single volunteer profile
 Route::get('admin/volunteer/{id}/profile', ['as' => 'volunteer-profile', 'uses' => 'Admin\AdminController@volunteerProfile']);
+
+Route::post('admin/volunteer/update', 'Admin\AdminController@updateVolunteer');

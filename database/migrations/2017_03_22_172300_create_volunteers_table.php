@@ -32,6 +32,12 @@ class CreateVolunteersTable extends Migration
             $table->string('zip', 5);
             $table->string('emergency_contact');
             $table->string('emergency_phone', 20);
+            $table->string('supervisor', 100)->default('none');
+
+            // Some last minute additions to the table
+            $table->integer('note_id')->unsigned()->default(1);
+            $table->integer('skill_id')->unsigned()->default(1);
+
             // The default created at/updated at timestamps
             $table->timestamps();
         });

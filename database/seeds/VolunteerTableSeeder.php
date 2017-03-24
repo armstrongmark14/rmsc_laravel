@@ -28,14 +28,15 @@ class VolunteerTableSeeder extends Seeder
             'state' => 'NY',
             'zip' => '14618',
             'emergency_contact' => 'Mom',
-            'emergency_phone' => '555-555-5555'
+            'emergency_phone' => '555-555-5555',
+            'note_id' => 2
         ]);
 
         Volunteer::create([
             'badge' => '2',
             'department_id' => '3',
             'photo_id' => '1',
-            'type_id' => '4',
+            'type_id' => '3',
 
             'first_name' => 'Liz',
             'last_name' => 'Albertorio',

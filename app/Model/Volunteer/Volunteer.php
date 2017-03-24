@@ -23,6 +23,9 @@ class Volunteer extends Model
         'zip',
         'emergency_contact',
         'emergency_phone',
+        'supervisor',
+        'note_id',
+        'skill_id',
     ];
 
 
@@ -41,13 +44,6 @@ class Volunteer extends Model
         return [false, null]; // Else return false and no timesheet
     }
 
-    /**
-     * @return the latest timesheet this volunteer has in our database
-     */
-    private function getLatestTimesheet()
-    {
-        return $this->timesheets()->orderBy('in', 'ASC')->first();
-    }
 
     /**
      * Had to use a raw query because getting the difference was looking too hard with Eloquent here.
@@ -62,6 +58,14 @@ class Volunteer extends Model
             ->where('volunteer_id', '=', $this->id)
             ->get();
         return $totalHours[0]->hours;
+    }
+
+    /**
+     * @return the latest timesheet this volunteer has in our database
+     */
+    private function getLatestTimesheet()
+    {
+        return $this->timesheets()->orderBy('in', 'ASC')->first();
     }
 
     /**
@@ -102,5 +106,15 @@ class Volunteer extends Model
     public function timesheets()
     {
         return $this->hasMany('App\Model\Volunteer\Timesheet')->orderBy('in', 'DESC');
+    }
+
+    public function note()
+    {
+        return $this->belongsTo('App\Model\Volunteer\Note');
+    }
+
+    public function skill()
+    {
+        return $this->belongsTo('App\Model\Volunteer\Skill');
     }
 }
