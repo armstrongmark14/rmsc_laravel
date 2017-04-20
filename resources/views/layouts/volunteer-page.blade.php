@@ -35,6 +35,7 @@
             display: none;
         }
 
+
     </style>
 </head>
 <body>
@@ -56,7 +57,34 @@
                     </a>
                 </li>
             </ul>
+
+
+
+
             <ul class="nav navbar-nav navbar-right">
+
+                @if (Auth::user())
+                    <li class="navLink">
+                        <a href="{{ route('admin-home') }}">
+                            <i class="fa fa-home"></i>
+                            <span class="navText">Home</span>
+                        </a>
+
+                    </li>
+
+                    @if (Auth::user()->isSuperAdmin())
+                        <li class="navLink">
+                            <a href="{{ route('super-admin-dashboard') }}">
+                                <i class="fa fa-dashboard"></i>
+                                <span class="navText">Dashboard</span>
+                            </a>
+
+                        </li>
+
+                    @endif
+
+                @endif
+
                 <li class="navLink navLast">
                     <a href="{{ route('admin-login') }}">
                         <i class="fa fa-lock" aria-hidden="true"></i>

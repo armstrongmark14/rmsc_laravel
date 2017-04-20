@@ -2,18 +2,9 @@
 
 @section('content')
 
-    @include('templates.errors.login-message')
+    @include('templates.errors.error-messages')
 
-    @if( Session::has('timeclock'))
-        <div class="alert alert-info col-sm-6 col-sm-offset-3 disappear">
-            {{ Session::get('timeclock') }}
-        </div>
-        <script>
-            $('.disappear').delay(7000).queue(function(){
-                $(this).addClass("hidden");
-            });
-        </script>
-    @endif
+
 
 
     <div class="col-md-4 col-md-offset-4">

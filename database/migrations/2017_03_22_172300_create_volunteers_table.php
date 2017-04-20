@@ -16,23 +16,23 @@ class CreateVolunteersTable extends Migration
         Schema::create('volunteers', function (Blueprint $table) {
             $table->increments('id')->unsigned()->index();
             // Creating all the foreign keys for these tables
-            $table->integer('badge')->unsigned()->unique();
-            $table->integer('department_id')->unsigned();
+            $table->integer('badge')->unsigned()->unique()->index();
+            $table->integer('department_id')->unsigned()->default(1);
             $table->integer('photo_id')->unsigned()->default(1);
-            $table->integer('type_id')->unsigned();
+            $table->integer('type_id')->unsigned()->default(1);
 
             // Creating the volunteer data
             $table->string('first_name', 50);
-            $table->string('last_name', 50);
-            $table->string('email', 100);
-            $table->string('phone', 20);
-            $table->string('address');
-            $table->string('city', 50);
-            $table->string('state', 2);
-            $table->string('zip', 5);
-            $table->string('emergency_contact');
-            $table->string('emergency_phone', 20);
-            $table->string('supervisor', 100)->default('none');
+            $table->string('last_name', 50)->nullable();
+            $table->string('email', 100)->nullable();
+            $table->string('phone', 20)->nullable();
+            $table->string('address')->nullable();
+            $table->string('city', 50)->nullable();
+            $table->string('state', 2)->nullable();
+            $table->string('zip', 5)->nullable();
+            $table->string('emergency_contact')->nullable();
+            $table->string('emergency_phone', 20)->nullable();
+            $table->string('supervisor', 100)->nullable();
 
             // Some last minute additions to the table
             $table->integer('note_id')->unsigned()->default(1);

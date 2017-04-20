@@ -11,23 +11,143 @@ use App\Model\Volunteer\Volunteer;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
 
 class AdminController extends Controller
 {
     //
 
+
+
+    /**
+     * Shows a profile page for a volunteer, and allows you to edit their values
+     *
+     * @param Request $request
+     * @return \Illuminate\Http\RedirectResponse
+     */
+    public function updateVolunteer(Request $request)
+    {
+        $volunteer = Volunteer::findOrFail($request->id);
+        $this->validate($request, [
+            'first_name' => 'required',
+            'email' => 'nullable|email'
+        ]);
+        $volunteer->update($request->all());
+        $volunteer->department_id = $request->department;
+        $volunteer->type_id = $request->type;
+
+        // Handling the note & skill updating
+        $this->updateNote($request, $volunteer);
+        $this->updateSkill($request, $volunteer);
+
+        $volunteer->save();
+        return redirect()->action('Admin\AdminController@volunteerProfile', ['id' => $volunteer->id]);
+    }
+
+
+    public function createVolunteer(Request $request)
+    {
+        $this->validate($request, [
+            'badge' => 'bail|required|unique:volunteers',
+            'first_name' => 'required',
+            'email' => 'nullable|email'
+        ]);
+
+//        return dd($request);
+
+        $volunteer = Volunteer::create($request->all());
+        $volunteer->save();
+        return $this->volunteerProfile($volunteer->id);
+    }
+
+    /**
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View Goes to admin/home
+     */
     public function homepage()
     {
         return view('admin.home');
     }
 
+    /**
+     * Displays the add a volunteer page
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View
+     */
+    public function addVolunteer()
+    {
+        $departments = Department::orderBy('name', 'ASC')->pluck('name', 'id');
+        $types = Type::orderBy('name', 'ASC')->pluck('name', 'id');
+        return view('admin.volunteer.profile', compact('departments', 'types'));
+    }
+
+    /**
+     * @param $id - The volunteer id from the database.... not the badge #
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View returns profile of this volunteer
+     */
     public function volunteerProfile($id)
     {
         $volunteer = Volunteer::find($id);
         $departments = Department::orderBy('name', 'ASC')->pluck('name', 'id');
         $types = Type::orderBy('name', 'ASC')->pluck('name', 'id');
         return view('admin.volunteer.profile', compact('volunteer', 'departments', 'types'));
+    }
+
+    public function editTimesheet($id)
+    {
+        $timesheet = Timesheet::find($id);
+        $volunteer= $timesheet->volunteer;
+        return view('admin.volunteer.edit.timesheet', compact('volunteer', 'timesheet'));
+    }
+
+    public function updateTimesheet(Request $request)
+    {
+        $timesheet = Timesheet::find($request->id);
+        $date = $request->date;
+        $timesheet->in = $date . ' ' . $request->in;
+        $timesheet->out = $date . ' ' . $request->out;
+        $timesheet->save();
+        return redirect()->route('admin-volunteer-timesheet', $request->volunteerID);
+    }
+
+    /**
+     * @param $id - The volunteer id - NOT BADGE #
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View A list of this volunteers timesheets
+     */
+    public function volunteerTimesheet($id)
+    {
+        $volunteer = Volunteer::find($id);
+        $timesheets = Timesheet::where('volunteer_id', '=', $volunteer->id)->orderBy('timesheets.in', 'DESC')->get();
+        $editTimesheets = true;
+        return view('admin.volunteer.timesheet', compact('volunteer', 'timesheets', 'editTimesheets'));
+    }
+
+    public function openTimesheets()
+    {
+        $timesheets = Timesheet::whereRaw('timesheets.in = timesheets.out')->orderBy('timesheets.in', 'DESC')->get();
+        $editTimesheets = true;
+        return view('admin.page.open-timesheets', compact('timesheets', 'editTimesheets'));
+    }
+
+    /**
+     * @param $id volunteer id from database
+     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View The confirmation page to delete vol
+     */
+    public function volunteerDelete($id)
+    {
+        $volunteer = Volunteer::find($id);
+        return view('admin.volunteer.delete', compact('volunteer'));
+    }
+
+    /**
+     * This is the page where the Admin has to confirm they want to delete that volunteer
+     *
+     * @param $id - The id of the vol that we're deleting
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector Deletes the vol and redirects
+     */
+    public function volunteerDeleteConfirmed($id)
+    {
+        Volunteer::destroy($id);
+        return redirect('/admin/home');
     }
 
     /**
@@ -52,22 +172,11 @@ class AdminController extends Controller
         return view('admin.page.currently-here', compact('volunteers'));
     }
 
-    public function updateVolunteer(Request $request)
-    {
-        $volunteer = Volunteer::findOrFail($request->id);
-        $volunteer->update($request->all());
-        $volunteer->department_id = $request->department;
-        $volunteer->type_id = $request->type;
-
-        // Handling the note & skill updating
-        $this->updateNote($request, $volunteer);
-        $this->updateSkill($request, $volunteer);
-
-        $volunteer->save();
-        return redirect()->action('Admin\AdminController@volunteerProfile', ['id' => $volunteer->id]);
-    }
-
-
+    /**
+     * Uses the inputs to update a note if needed when editing volunteer info
+     * @param Request $request
+     * @param Volunteer $volunteer
+     */
     private function updateNote(Request $request, Volunteer $volunteer)
     {
         if ($request->note_id != 1) {
@@ -81,6 +190,11 @@ class AdminController extends Controller
         }
     }
 
+    /**
+     * Uses the inputs to update a skill if needed when editing volunteer info
+     * @param Request $request
+     * @param Volunteer $volunteer
+     */
     private function updateSkill(Request $request, Volunteer $volunteer)
     {
         if ($request->skill_id != 1) {

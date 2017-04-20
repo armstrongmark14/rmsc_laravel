@@ -2,11 +2,11 @@
 
 @section('content')
 
-    @include('templates.errors.login-message')
+    @include('templates.errors.error-messages')
 
     <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
-            <div class="panel-heading">RMSC Admin</div>
+            <div class="panel-heading">RMSC Admin - {{ Auth::user()->name }}</div>
             <div class="panel-body">
 
                 <a href="{{ route('admin-volunteer-list') }}">
@@ -20,6 +20,20 @@
                         Currently Here
                     </button>
                 </a>
+
+                <a href="{{ route('open-timesheets') }}">
+                    <button class="btn btn-warning">
+                        Open Timesheets
+                    </button>
+                </a>
+                @if (Auth::user()->isSuperAdmin())
+
+                    <a href="{{ route('super-admin-dashboard') }}">
+                        <button class="btn btn-primary">
+                            Super Admin Dashboard
+                        </button>
+                    </a>
+                @endif
 
             </div>
         </div>

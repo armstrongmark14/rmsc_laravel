@@ -20,6 +20,16 @@ class Timesheet extends Model
         return $this->belongsTo('App\Model\Volunteer\Volunteer');
     }
 
+    public function displayOut()
+    {
+        if (strcmp($this->in, $this->out) != 0) {
+            return $this->out;
+        }
+        else {
+            return "";
+        }
+    }
+
     /**
      * @return string Returns the number of hours to 2 decimals that this timesheet is for
      */

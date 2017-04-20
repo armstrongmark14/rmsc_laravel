@@ -6,12 +6,12 @@
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span class="profile-name">
-                    Timesheets: {{ $volunteer->first_name }}
+                    Timesheets: {{ $volunteer->first_name }} {{ $volunteer->last_name }}
                 </span>
                 <span class="total-hours">Total Hours: {{ $volunteer->totalHours() }}</span>
                 <span class="align-right">
-                    <a href="{{ route('home') }}">
-                        <button>Log Out</button>
+                    <a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">
+                        <button class="btn btn-primary">Back to Profile</button>
                     </a>
                 </span>
             </div>

@@ -2,7 +2,7 @@
 
 @section('content')
 
-    @include('templates.errors.login-message')
+    @include('templates.errors.error-messages')
 
     <div class="col-md-4 col-md-offset-4">
         <div class="panel panel-default">

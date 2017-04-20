@@ -9,7 +9,7 @@ class Volunteer extends Model
 {
     // These are the fields that can be edited and changed
     protected $fillable = [
-        'badge_id',
+        'badge',
         'department_id',
         'type_id',
         'photo_id',
@@ -116,5 +116,10 @@ class Volunteer extends Model
     public function skill()
     {
         return $this->belongsTo('App\Model\Volunteer\Skill');
+    }
+
+    public function setLastNameAttribute($value)
+    {
+        $this->attributes['last_name'] = (trim($value) !== '') ? $value : null;
     }
 }

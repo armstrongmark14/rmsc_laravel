@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Volunteer;
 use App\Model\Volunteer\Volunteer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\Auth;
 
 
 class LoginController extends Controller
@@ -21,6 +22,11 @@ class LoginController extends Controller
         // If the user returned here and was logged in, we need to delete their session
         session()->forget('volunteer-logged-in');
         session()->forget('admin-logged-in');
+
+        if (Auth::user()) {
+            Auth::logout();
+        }
+
         return view('login.home-login');
     }
 
