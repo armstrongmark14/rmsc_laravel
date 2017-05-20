@@ -6,7 +6,7 @@
 
     <div class="col-md-4 col-md-offset-4">
         <div class="panel panel-default">
-            <div class="panel-heading">Volunteer Login</div>
+            <div class="panel-heading">Admin Login</div>
             <div class="panel-body">
                 {!! Form::open(['method' => 'POST', 'action' => 'Admin\LoginController@loginCheck']) !!}
 

@@ -1,0 +1,40 @@
+/* Styling for the volunteer login form page */
+
+#loginBadge {
+  height: 75px;
+  font-size: 50px;
+  font-weight: bold;
+}
+.login-text {
+  color: $font-color;
+  font-size: 50px;
+  font-weight: bold;
+  text-align: center;
+  font-family: Tahoma;
+
+  @media screen and (max-width: $large-screen) {
+    font-size: 40px;
+  }
+
+  @media screen and (max-width: $medium-screen) {
+    font-size: 33px;
+  }
+
+  @media screen and (max-width: $small-screen) {
+    font-size: 20px;
+  }
+}
+
+#vol-login-btn {
+  height: 75px;
+  width: 100%;
+  font-size: 30px;
+  font-weight: bold;
+}
+
+
+
+/* General form styling site-wide */
+.form-control {
+  border: 1px solid #999;
+}

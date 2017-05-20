@@ -1,0 +1,35 @@
+/* Making the border radiuses of everything 0px */
+.btn, .panel, input, .form-control, .alert {
+  border-radius: 0px 0px;
+}
+
+
+// Error message styling
+.alert {
+  font-size: 25px;
+  font-weight: bold;
+}
+
+
+// Volunteer profile page styling
+.vol-profile { text-align: center; }
+.profile-name { font-size: 25px; }
+
+#vol-logout-btn, #vol-back-btn {
+  position: relative;
+  float: right;
+  margin-right: 15px;
+}
+
+.vol-profile-btn {
+  margin: 0 auto;
+  height: 75px;
+  width: 250px;
+  font-size: 25px;
+}
+
+
+.table-no-border td, .table-no-border th {
+  border: 1px solid #fff;
+  border-top: 1px solid #fff;
+}

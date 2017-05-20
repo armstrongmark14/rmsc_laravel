@@ -39,7 +39,7 @@ class LoginController extends Controller
     public function loginCheck(Request $request)
     {
         // Checks to see if the badge is a valid #, then redirects if no/yes
-        if (! $volunteer = Volunteer::find($request->badge)) {
+        if (! $volunteer = Volunteer::where('badge', '=', $request->badge)->firstOrFail()) {
             return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 1]);
         }
         session()->put('volunteer-logged-in', $volunteer);

@@ -28,7 +28,7 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
 
 
     // Route for the volunteer profile directly after loggign in
-    Route::get('/volunteer/profile', 'Volunteer\VolunteerController@profile');
+    Route::get('/volunteer/profile', array('as' => 'volunteer-page', 'uses' => 'Volunteer\VolunteerController@profile'));
 
     // Route for each specific volunteer to view their own timesheets
     Route::get('/volunteer/timesheets', array('as' => 'volunteer-timesheets', 'uses' => 'Volunteer\VolunteerController@viewTimesheets'));
@@ -74,6 +74,16 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
         Route::get('admin/edit/timesheet/{id}', ['as' => 'admin-edit-timesheet', 'uses' => 'AdminController@editTimesheet']);
         Route::post('admin/update/timesheet', ['as' => 'admin-update-timesheet', 'uses' => 'AdminController@updateTimesheet']);
 
+        // Routes for charting charts
+        Route::get('admin/charts/total-hours', ['as' => 'total-hours-chart', 'uses' => 'ChartController@totalHours']);
+
+        // routes for loading the stuff on the homepage through AJAX
+        Route::get('admin/homepage/current-count', 'ChartController@updateHomeVolunteerCount');
+        Route::get('admin/homepage/todays-hours', 'ChartController@updateHomeHourCount');
+        Route::get('admin/homepage/total-logins', 'ChartController@updateHomeTotalLogins');
+        Route::get('admin/homepage/total-hours', 'ChartController@updateHomeTotalHours');
+
+
 
         /**
          * ROUTES FOR THE SUPER ADMINS
@@ -92,6 +102,20 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
             // Routes for removing types and departments
             Route::get('admin/super/remove/{id}/type', ['as' => 'remove-type', 'uses' => 'SuperAdminController@removeType']);
             Route::get('admin/super/remove/{id}/department', ['as' => 'remove-department', 'uses' => 'SuperAdminController@removeDepartment']);
+
+            // Routes for managing RMSC Admin users
+            Route::get('admin/super/users', ['as' => 'manage-users', 'uses' => 'SuperAdminController@manageUsers']);
+            Route::get('admin/super/remove-user/{id}', ['as' => 'remove-admin-user', 'uses' => 'SuperAdminController@removeUser']);
+            Route::get('admin/super/add-user', ['as' => 'admin-add-user', 'uses' => 'SuperAdminController@addUserPage']);
+            Route::post('admin/super/add-user', ['as' => 'admin-add-user-submit', 'uses' => 'SuperAdminController@addUser']);
+
+            // Routes for changing password
+            Route::get('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@changePassword']);
+            Route::post('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@updatePassword']);
+
+            Route::post('admin/super/change-permissions', 'SuperAdminController@changePermissions');
+
+
         });
 
 

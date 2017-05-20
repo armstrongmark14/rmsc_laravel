@@ -2,7 +2,9 @@
 
 @section('content')
 
-    <div class="col-md-6 col-md-offset-3">
+    @include('templates.admin.side-navigation')
+
+    <div class="col-md-10">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span class="profile-name">
@@ -10,7 +12,7 @@
                 </span>
                 <span class="align-right">
                     <a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">
-                        <button class="btn btn-primary">Back to Profile</button>
+                        <button id="vol-back-btn" class="btn btn-primary">Back to Profile</button>
                     </a>
                 </span>
             </div>

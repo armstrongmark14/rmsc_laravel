@@ -1,18 +1,18 @@
 @if (isset($volunteer))
-    {!! Form::model($volunteer, ['method' => 'POST', 'action' => 'Admin\AdminController@updateVolunteer']) !!}
+    {!! Form::model($volunteer, ['method' => 'POST', 'enctype' => 'multipart/form-data', 'action' => 'Admin\AdminController@updateVolunteer']) !!}
     {{-- This section will hold special hidden values we want to use later updating forms --}}
     {!! Form::hidden('id', $volunteer->id) !!}
     {!! Form::hidden('note_id', $volunteer->note->id) !!}
     {!! Form::hidden('skill_id', $volunteer->skill->id) !!}
     <?php $badgeFormValues = ['id' => 'badge', 'class' => 'form-control', 'disabled' => 'disabled']  ?>
 @else
-    {!! Form::open(['method' => 'POST', 'action' => 'Admin\AdminController@createVolunteer']) !!}
+    {!! Form::open(['method' => 'POST', 'enctype' => 'multipart/form-data', 'action' => 'Admin\AdminController@createVolunteer']) !!}
     <?php $badgeFormValues = ['id' => 'badge', 'class' => 'form-control']  ?>
 @endif
 
 
 <div class="col-lg-6">
-    <table class="table">
+    <table class="table table-no-border">
         <tr>
             <td>
                 {!! Form::label('first_name', 'First Name:') !!}
@@ -66,7 +66,7 @@
 
 </div>
 <div class="col-lg-6">
-    <table class="table">
+    <table class="table table-no-border">
         <tr>
             <td>
                 {!! Form::label('badge', 'Badge Number:') !!}
@@ -106,7 +106,7 @@
         <tr>
             <td>
                 {!! Form::label('image', 'Photo:') !!}
-                {!! Form::file('image', null, ['id' => 'image', 'class' => 'form-control', 'autocomplete' => 'off']) !!}
+                {!! Form::file('image', ['id' => 'image', 'class' => 'form-control']) !!}
             </td>
         </tr>
         <tr>

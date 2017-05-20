@@ -6,6 +6,11 @@
 @import "variables";
 
 // Bootstrap
-@import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "bootstrap/_bootstrap.scss";
 
+// Mark Custom Sass
+@import "rmsc/rmsc_main";
 
+@import "rmsc/rmsc_navigation";
+
+@import "rmsc/rmsc_input";

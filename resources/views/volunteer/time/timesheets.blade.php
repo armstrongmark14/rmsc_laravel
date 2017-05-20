@@ -2,19 +2,25 @@
 
 @section('content')
 
-    <div class="col-md-4 col-md-offset-4">
+    <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
+
             <div class="panel-heading">
                 <span class="profile-name">
-                    Timesheets: {{ $volunteer->first_name }}
+                    Times: {{ $volunteer->first_name }}
                 </span>
-                <span class="total-hours">Total Hours: {{ $volunteer->totalHours() }}</span>
-                <span class="align-right">
-                    <a href="{{ route('home') }}">
-                        <button>Log Out</button>
-                    </a>
-                </span>
+
+                <a href="{{ route('volunteer-page') }}">
+                    <button id="vol-back-btn" class="btn btn-success"><i class="fa fa-user"></i> Profile</button>
+                </a>
             </div>
+
+            <div class="panel-heading">
+                <span class="total-hours">Total Hours: {{ $volunteer->totalHours() }}</span>
+
+
+            </div>
+
             <div class="panel-body">
                 {{-- Including the timesheet table template, already have the variable $timesheets here --}}
                 @include('templates.time.timesheet-table')

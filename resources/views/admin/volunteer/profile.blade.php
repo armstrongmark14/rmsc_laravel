@@ -4,9 +4,11 @@
 
     @include('templates.errors.error-messages')
 
-    <div class="col-md-8 col-md-offset-2">
+    @include('templates.admin.side-navigation')
+
+    <div class="col-md-10">
         <div class="panel panel-default">
-            <div class="panel-heading">RMSC Admin
+            <div class="panel-heading">RMSC - Add Volunteer
 
                 {{-- Only want to display these links if this is a volunteer profile --}}
                 @if (isset($volunteer))

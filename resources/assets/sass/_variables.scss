@@ -1,3 +1,8 @@
+// Screen size breakpoints
+$small-screen: 1000px;
+$medium-screen: 1300px;
+$large-screen: 1500px;
+
 
 // Body
 $body-bg: #f5f8fa;
@@ -19,12 +24,14 @@ $brand-danger: #bf5329;
 // Typography
 $icon-font-path: "~bootstrap-sass/assets/fonts/bootstrap/";
 $font-family-sans-serif: "Raleway", sans-serif;
-$font-size-base: 14px;
+$font-size-base: 18px;
 $line-height-base: 1.6;
 $text-color: #636b6f;
+$font-color: #333;
 
 // Navbar
-$navbar-default-bg: #fff;
+$navbar-default-bg: #4f2683;
+$navbar-font-color: #ffffff;
 
 // Buttons
 $btn-default-color: $text-color;

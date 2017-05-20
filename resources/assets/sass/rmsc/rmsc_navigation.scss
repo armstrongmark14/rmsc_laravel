@@ -1,0 +1,84 @@
+.navbar {
+  background-color: $navbar-default-bg;
+  border: 0px;
+  border-bottom: 1px solid $navbar-default-bg * 0.75;
+  border-radius: 0px 0px;
+  font-color: $navbar-font-color;
+
+  .navbar-brand {
+    position: relative;
+    top: -16px;
+  }
+
+  .navbar-header {
+    color: $navbar-font-color;
+    font-size: 25px;
+    position: relative;
+    top: 5px;
+    border-radius: 0px 0px;
+
+    :focus, :active {
+      background-color: $navbar-default-bg;
+    }
+
+    button {
+      border: none;
+      top: -5px;
+      font-size: 1px;
+    }
+
+  }
+
+  .container-fluid {
+    .navbar-collapse {
+      ul li a {
+        color: $navbar-font-color;
+        font-size: 18px;
+
+        i {
+          font-size: 20px;
+        }
+      }
+    }
+  }
+
+}
+
+.navbar-left {
+  position: relative;
+  width: 100%;
+  background-color: #fff;
+  border: 1px solid #d3e0e9;
+
+  .row .nav-sidebar {
+    li {
+      background-color: #fff;
+      border-bottom: 1px solid #d3e0e9 * 1.05;
+
+      :hover {
+        background-color: #E0E0E0;
+      }
+
+
+      a {
+        color: $font-color;
+        font-weight: bold;
+        :hover {
+          color: #fff;
+        }
+
+        i {
+          position: relative;
+          top: 2px;
+          font-size: 25px;
+          color: $navbar-default-bg;
+          :hover {
+            color: #333;
+          }
+        }
+      }
+
+
+    }
+  }
+}

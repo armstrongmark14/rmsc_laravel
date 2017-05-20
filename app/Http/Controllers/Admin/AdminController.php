@@ -4,15 +4,19 @@ namespace App\Http\Controllers\Admin;
 
 use App\Model\Volunteer\Department;
 use App\Model\Volunteer\Note;
+use App\Model\Volunteer\Photo;
 use App\Model\Volunteer\Skill;
 use App\Model\Volunteer\Timesheet;
 use App\Model\Volunteer\Type;
 use App\Model\Volunteer\Volunteer;
+use App\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Pagination\Paginator;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 
 class AdminController extends Controller
 {
@@ -37,6 +41,15 @@ class AdminController extends Controller
         $volunteer->department_id = $request->department;
         $volunteer->type_id = $request->type;
 
+
+        // Handling the file upload
+        if ($file = $request->file('image')) {
+            $name = $file->getClientOriginalName();
+            $file->move('images/volunteers', $name);
+            $photo = Photo::create(['filename' => $name]);
+            $volunteer->photo_id = $photo->id;
+        }
+
         // Handling the note & skill updating
         $this->updateNote($request, $volunteer);
         $this->updateSkill($request, $volunteer);
@@ -54,9 +67,19 @@ class AdminController extends Controller
             'email' => 'nullable|email'
         ]);
 
-//        return dd($request);
-
         $volunteer = Volunteer::create($request->all());
+
+        if ($file = $request->file('image')) {
+            $name = $file->getClientOriginalName();
+            $file->move('images/volunteers', $name);
+            $photo = Photo::create(['filename' => $name]);
+            $volunteer->photo_id = $photo->id;
+        }
+//
+//        dd($request);
+
+
+
         $volunteer->save();
         return $this->volunteerProfile($volunteer->id);
     }
@@ -66,7 +89,14 @@ class AdminController extends Controller
      */
     public function homepage()
     {
-        return view('admin.home');
+        $weekHours = DB::select(DB::raw("
+            SELECT DATE(timesheets.in) as day,
+              ROUND(SUM(TIMESTAMPDIFF(MINUTE, timesheets.in, timesheets.out ) / 60 ), 2) as hours
+            FROM timesheets
+            WHERE DATE(timesheets.in) > CURDATE() - INTERVAL 7 DAY
+            GROUP BY DATE(timesheets.in);"));
+
+        return view('admin.home', compact('weekHours'));
     }
 
     /**
@@ -207,4 +237,39 @@ class AdminController extends Controller
             $volunteer->skill_id = $skill->id;
         }
     }
+
+    public function changePassword()
+    {
+        return view('admin.page.change-password');
+    }
+
+    public function updatePassword(Request $request)
+    {
+        $user = User::find($request->user_id);
+
+        // Check if old password != current one in DB
+        if (! Hash::check($request->old_password, $user->password)) {
+            session()->flash('admin-error', 'Old password does not match.');
+            return redirect('/admin/change-password');
+        }
+
+        // Check if new and confirmed password don't match && are not null
+        if (strcmp($request->new_password, $request->confirm_password) != 0
+                || $request->new_password == null) {
+            session()->flash('admin-error', 'New passwords do not match.');
+            if ($request->new_password == null) {
+                session()->flash('admin-error', 'New password cannot be blank');
+            }
+            return redirect('/admin/change-password');
+        }
+
+        // Now we can update the user's password
+        $user->password = Hash::make($request->new_password);
+        $user->save();
+
+        session()->flash('admin-success', 'Password updated successfully.');
+
+        return redirect('admin/home');
+    }
+
 }

@@ -6,8 +6,6 @@
           content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
 
-    <!-- Bootstrap Core CSS -->
-    <link href="{{asset('css/app.css')}}" rel="stylesheet">
     <!-- FontAwesome icons CDN -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
 
@@ -15,6 +13,8 @@
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap Core JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+
+    <link href="{{asset('css/app.css')}}" rel="stylesheet">
 
     <title>RMSC - Volunteers</title>
 
@@ -45,20 +45,17 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
-            RMSC Volunteers
-            <!-- <a class="navbar-brand" href="/"><img id="logo" src="" height="50px" width="200px"></a> -->
+            <a class="navbar-brand" href="/"><img id="logo" src="/laravel/rmsc/public/images/logo-small.png" height="50px" width="200px"></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">
                 <li class="navLink">
                     <a href="{{ route('home') }}">
-                        <i class="fa fa-user" aria-hidden="true"></i>
-                        <span class="navText">Volunteer Login</span>
+
+                        <span class="navText"><i class="fa fa-user" aria-hidden="true"></i> Volunteer Login</span>
                     </a>
                 </li>
             </ul>
-
-
 
 
             <ul class="nav navbar-nav navbar-right">
@@ -66,31 +63,25 @@
                 @if (Auth::user())
                     <li class="navLink">
                         <a href="{{ route('admin-home') }}">
-                            <i class="fa fa-home"></i>
-                            <span class="navText">Home</span>
+                            <span class="navText"><i class="fa fa-home"></i> Home</span>
                         </a>
 
                     </li>
+                    <li class="navLink navLast">
+                        <a href="{{ route('admin-login') }}">
+                            <span class="navText"><i class="fa fa-lock" aria-hidden="true"></i> Logout {{ Auth::user()->name }}</span>
+                        </a>
+                    </li>
 
-                    @if (Auth::user()->isSuperAdmin())
-                        <li class="navLink">
-                            <a href="{{ route('super-admin-dashboard') }}">
-                                <i class="fa fa-dashboard"></i>
-                                <span class="navText">Dashboard</span>
-                            </a>
-
-                        </li>
-
-                    @endif
-
-                @endif
+                @else
 
                 <li class="navLink navLast">
                     <a href="{{ route('admin-login') }}">
-                        <i class="fa fa-lock" aria-hidden="true"></i>
-                        <span class="navText">Admin Login</span>
+                        <span class="navText"><i class="fa fa-lock" aria-hidden="true"></i> Admin Login</span>
                     </a>
                 </li>
+
+                @endif
         </ul>
     </div>
 </nav>

@@ -2,7 +2,9 @@
 
 @section('content')
 
-    <div class="col-md-4 col-md-offset-4">
+    @include('templates.admin.side-navigation')
+
+    <div class="col-md-10">
         <div class="panel panel-default">
             <div class="panel-heading">
                 Open Timesheets

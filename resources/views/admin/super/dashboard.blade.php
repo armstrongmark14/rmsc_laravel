@@ -4,7 +4,9 @@
 
     @include('templates.errors.error-messages')
 
-    <div class="col-md-8 col-md-offset-2">
+    @include('templates.admin.side-navigation')
+
+    <div class="col-md-10">
         <div class="panel panel-default">
             <div class="panel-heading">Super Admin Dashboard</div>
             <div class="panel-body">

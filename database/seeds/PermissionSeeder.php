@@ -14,11 +14,13 @@ class PermissionSeeder extends Seeder
     {
         //
         Permission::create([
-            'level' => 1
+            'level' => 1,
+            'name' => 'Basic User'
         ]);
 
         Permission::create([
-            'level' => 1337
+            'level' => 1337,
+            'name' => 'Super Admin'
         ]);
     }
 }
