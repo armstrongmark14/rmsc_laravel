@@ -99,9 +99,11 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
             // Routes for adding types and departments
             Route::post('admin/super/add/type', ['as' => 'add-type', 'uses' => 'SuperAdminController@addType']);
             Route::post('admin/super/add/department', ['as' => 'add-department', 'uses' => 'SuperAdminController@addDepartment']);
+            Route::post('admin/super/add/location', ['as' => 'add-location', 'uses' => 'SuperAdminController@addLocation']);
             // Routes for removing types and departments
             Route::get('admin/super/remove/{id}/type', ['as' => 'remove-type', 'uses' => 'SuperAdminController@removeType']);
             Route::get('admin/super/remove/{id}/department', ['as' => 'remove-department', 'uses' => 'SuperAdminController@removeDepartment']);
+            Route::get('admin/super/remove/{id}/location', ['as' => 'remove-location', 'uses' => 'SuperAdminController@removeLocation']);
 
             // Routes for managing RMSC Admin users
             Route::get('admin/super/users', ['as' => 'manage-users', 'uses' => 'SuperAdminController@manageUsers']);

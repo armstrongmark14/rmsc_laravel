@@ -4,6 +4,7 @@ namespace App\Http\Controllers\Admin;
 
 use App\Model\Volunteer\Department;
 use App\Model\Volunteer\Type;
+use App\Model\Volunteer\Location;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
 use App\User;
@@ -20,7 +21,8 @@ class SuperAdminController extends Controller
     {
         $types = Type::orderBy('name', 'ASC')->get();
         $departments = Department::orderBy('name', 'ASC')->get();
-        return view('admin.super.dashboard', compact('types', 'departments'));
+        $locations = Location::orderBy('id', 'ASC')->get();
+        return view('admin.super.dashboard', compact('types', 'departments', 'locations'));
     }
 
     public function addUserPage()
@@ -85,6 +87,21 @@ class SuperAdminController extends Controller
             'name' => 'required|unique:departments',
         ]);
         Department::create(['name' => $request->name]);
+        return redirect('admin/super/dashboard');
+    }
+
+    public function addLocation(Request $request)
+    {
+        $this->validate($request, [
+            'ip_address' => 'required|unique:locations',
+        ]);
+        Location::create(['ip_address' => $request->ip_address]);
+        return redirect('admin/super/dashboard');
+    }
+
+    public function removeLocation($id)
+    {
+        Location::destroy($id);
         return redirect('admin/super/dashboard');
     }
 
