@@ -36,6 +36,9 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
     // Routes for the timeclock functionality
     Route::get('/volunteer/timeclock/in', array('as' => 'clock-in', 'uses' => 'Volunteer\TimesheetController@clockIn'));
     Route::get('/volunteer/timeclock/out', array('as' => 'clock-out', 'uses' => 'Volunteer\TimesheetController@clockOut'));
+    // Routes for editing timesheets as a volunteer
+    Route::get('/volunteer/timeclock/edit-timesheet/{id}', array('as' => 'volunteer-edit-timesheet', 'uses' => 'Volunteer\TimesheetController@edit'));
+    Route::post('/volunteer/timeclock/update-timesheet', array('as' => 'volunteer-update-timesheet', 'uses' => 'Volunteer\TimesheetController@updateTimesheet'));
 
 
 

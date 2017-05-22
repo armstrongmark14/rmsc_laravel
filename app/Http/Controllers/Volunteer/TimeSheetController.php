@@ -32,4 +32,29 @@ class TimeSheetController extends Controller
     {
         session()->flash('timeclock', $name . ' clocked ' . $message . ' at ' . substr(Timesheet::now(), 10, 18));
     }
+
+    public function edit($id)
+    {
+        $timesheet = Timesheet::find($id);
+        $volunteer = session('volunteer-logged-in');
+        return view('volunteer.time.edit', compact('volunteer', 'timesheet'));
+    }
+
+    public function updateTimesheet(Request $request)
+    {
+        $volunteer = session('volunteer-logged-in');
+        if ($volunteer->edit_time != 1) {
+            session()->flash('login-status', 'You do not have access to edit timesheets.');
+            redirect('/');
+        }
+
+        $timesheet = Timesheet::find($request->id);
+        $date = $request->date;
+        $timesheet->in = $date . ' ' . $request->in;
+        $timesheet->out = $date . ' ' . $request->out;
+        $timesheet->save();
+
+        session()->flash('timeclock', 'Timesheet updated successfully.');
+        return redirect('/volunteer/timesheets');
+    }
 }

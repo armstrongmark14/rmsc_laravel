@@ -2,24 +2,22 @@
 
 @section('content')
 
-    @include('templates.admin.side-navigation')
-
-    <div class="col-md-10">
+    <div class="col-md-8 col-md-offset-2">
         <div class="panel panel-default">
             <div class="panel-heading">
                 <span class="profile-name">
                     Edit timesheet for: {{ $volunteer->first_name }} {{ $volunteer->last_name }}
                 </span>
                 <span class="align-right">
-                    <a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">
-                        <button id="vol-back-btn" class="btn btn-primary">Back to Profile</button>
+                    <a href="{{ route('volunteer-page') }}">
+                        <button id="vol-back-btn" class="btn btn-primary"><i class="fa fa-user"></i> Profile</button>
                     </a>
                 </span>
             </div>
             <div class="panel-body">
                 {{-- This will be the form for editing the timesheet with the ID that we entered up top --}}
 
-                {!! Form::model($timesheet, ['method' => 'POST', 'action' => 'Admin\AdminController@updateTimesheet']) !!}
+                {!! Form::model($timesheet, ['method' => 'POST', 'action' => 'Volunteer\TimesheetController@updateTimesheet']) !!}
 
                 {!! Form::hidden('id') !!}
                 {!! Form::hidden('volunteerID', $volunteer->id) !!}

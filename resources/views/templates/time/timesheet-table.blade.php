@@ -4,9 +4,14 @@
         <th>Time In</th>
         <th>Time Out</th>
         <th>Hours</th>
+
+        @if (isset($volunteerPage) && $volunteer->edit_time)
+            <th>Edit</th>
+        @endif
+
         @if(isset($editTimesheets))
             <th>Name</th>
-            <td>Edit</td>
+            <th>Edit</th>
         @endif
     </tr>
     {{-- This will include as many timesheet-rows as we need --}}
@@ -16,10 +21,16 @@
             <td>{{ substr($timesheet->in, 11, 18) }}</td>
             <td>{{ substr($timesheet->displayOut(), 11, 18) }}</td>
             <td>{{ $timesheet->hours() }}</td>
+
+            @if (isset($volunteerPage) && $volunteer->edit_time)
+                <td><a href="{{ route('volunteer-edit-timesheet', $timesheet->id) }}">Edit</a></td>
+            @endif
+
             @if(isset($editTimesheets))
                 <td>{{$timesheet->volunteer->first_name }} {{ $timesheet->volunteer->last_name }}</td>
                 <td><a href="{{ route('admin-edit-timesheet', $timesheet->id) }}">Edit</a></td>
             @endif
+
         </tr>
     @endforeach
 

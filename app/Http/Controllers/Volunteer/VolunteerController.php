@@ -41,7 +41,8 @@ class VolunteerController extends Controller
         }
         $volunteer = session('volunteer-logged-in');
         $timesheets = Volunteer::find($volunteer->badge)->timesheets;
-        return view('volunteer.time.timesheets', compact('volunteer', 'timesheets'));
+        $volunteerPage = true;
+        return view('volunteer.time.timesheets', compact('volunteer', 'timesheets', 'volunteerPage'));
     }
 
 

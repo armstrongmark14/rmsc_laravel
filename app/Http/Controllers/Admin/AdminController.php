@@ -62,7 +62,9 @@ class AdminController extends Controller
         return redirect()->route('volunteer-profile', ['id' => $volunteer->id]);
     }
 
-
+    /**
+     * Creates a Volunteer object from scratch and saves it to the database
+     */
     public function createVolunteer(Request $request)
     {
         $this->validate($request, [
