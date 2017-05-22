@@ -135,8 +135,8 @@
         </tr>
         <tr>
             <td>
-                {!! Form::label('edit_timesheets', 'Can Edit Timesheets:') !!}
-                {!! Form::checkbox('edit_timesheets', null, ['id' => 'edit_timesheets', 'class' => 'form-control', 'autocomplete' => 'off']) !!}
+                {!! Form::label('edit_time', 'Edit Timesheets:') !!}
+                {!! Form::checkbox('edit_time', 1) !!}
             </td>
         </tr>
     </table>

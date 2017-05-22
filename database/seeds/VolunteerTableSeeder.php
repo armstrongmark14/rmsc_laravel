@@ -32,7 +32,8 @@ class VolunteerTableSeeder extends Seeder
             'note_id' => 2,
             'skill_id' => 1,
             'limited' => 1,
-            'background' => 1
+            'background' => 1,
+            'edit_time' => 0
         ]);
 
         Volunteer::create([
@@ -54,7 +55,8 @@ class VolunteerTableSeeder extends Seeder
             'note_id' => 1,
             'skill_id' => 1,
             'limited' => 0,
-            'background' => 0
+            'background' => 0,
+            'edit_time' => 0
         ]);
     }
 }

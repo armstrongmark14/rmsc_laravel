@@ -39,6 +39,7 @@ class CreateVolunteersTable extends Migration
             $table->integer('skill_id')->unsigned()->default(1);
             $table->tinyInteger('limited')->default(0);
             $table->tinyInteger('background')->default(0);
+            $table->tinyInteger('edit_time')->default(0);
 
             // The default created at/updated at timestamps
             $table->timestamps();

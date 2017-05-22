@@ -53,8 +53,9 @@ class AdminController extends Controller
         // Handling the note & skill updating
         $this->updateNote($request, $volunteer);
         $this->updateSkill($request, $volunteer);
-        $this->updateLimited($request, $volunteer);
-        $this->updateBackground($request, $volunteer);
+        $this->updateCheckbox('limited', $request, $volunteer);
+        $this->updateCheckbox('background', $request, $volunteer);
+        $this->updateCheckbox('edit_time', $request, $volunteer);
 
         $volunteer->save();
 
@@ -246,20 +247,17 @@ class AdminController extends Controller
         }
     }
 
-    private function updateLimited(Request $request, Volunteer $volunteer)
+    /**
+     * @param $variable - The checkbox id field that you're updating on Volunteer
+     * @param Request $request - The request with the data from the form
+     * @param Volunteer $volunteer - The volunteer object you want to update values on
+     */
+    private function updateCheckbox($variable, Request $request, Volunteer $volunteer)
     {
-        $volunteer->limited = 0;
+        $volunteer->$variable = 0;
 
-        if ($request->limited == 1) {
-            $volunteer->limited = 1;
-        }
-    }
-    private function updateBackground(Request $request, Volunteer $volunteer)
-    {
-        $volunteer->background = 0;
-
-        if ($request->background == 1) {
-            $volunteer->background = 1;
+        if ($request->$variable == 1) {
+            $volunteer->$variable = 1;
         }
     }
 
