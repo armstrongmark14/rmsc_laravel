@@ -138,8 +138,22 @@ class AdminController extends Controller
 
     public function updateTimesheet(Request $request)
     {
+        $this->validate($request, [
+            'date' => 'required|date|min:10|max:10',
+            'in' => 'required|min:8|max:8',
+            'out' => 'required|min:8|max:8'
+        ]);
+
         $timesheet = Timesheet::find($request->id);
         $date = $request->date;
+
+        // Validating the date and times the user entered as valid timestamps
+        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
+            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
+            session()->flash('login-status', 'You must enter a valid date and time.');
+            return redirect('/volunteer/timeclock/edit-timesheet/'.$timesheet->id);
+        }
+
         $timesheet->in = $date . ' ' . $request->in;
         $timesheet->out = $date . ' ' . $request->out;
         $timesheet->save();

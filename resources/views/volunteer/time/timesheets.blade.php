@@ -2,6 +2,8 @@
 
 @section('content')
 
+    @include('templates.errors.error-messages')
+
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
 

@@ -2,6 +2,8 @@
 
 @section('content')
 
+    @include('templates.errors.error-messages')
+
     @include('templates.admin.side-navigation')
 
     <div class="col-md-10">
