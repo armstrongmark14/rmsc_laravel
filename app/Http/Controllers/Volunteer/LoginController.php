@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Volunteer;
 
+use App\Model\Volunteer\Location;
 use App\Model\Volunteer\Volunteer;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -21,7 +22,6 @@ class LoginController extends Controller
     {
         // If the user returned here and was logged in, we need to delete their session
         session()->forget('volunteer-logged-in');
-        session()->forget('admin-logged-in');
 
         if (Auth::user()) {
             Auth::logout();
@@ -39,9 +39,19 @@ class LoginController extends Controller
     public function loginCheck(Request $request)
     {
         // Checks to see if the badge is a valid #, then redirects if no/yes
-        if (! $volunteer = Volunteer::where('badge', '=', $request->badge)->firstOrFail()) {
+        if (! Volunteer::where('badge', '=', $request->badge)->exists()) {
             return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 1]);
         }
+
+        // Now we know we have a volunteer so we can store their info
+        $volunteer = Volunteer::where('badge', '=', $request->badge)->first();
+
+        // Some volunteers have to be location limited, so we check if they need to be and are on location
+        if ($volunteer->isLocationLimited()
+            && !Location::where('ip_address', '=', $request->ip_address)->exists()) {
+            return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 3]);
+        }
+
         session()->put('volunteer-logged-in', $volunteer);
         return redirect()->action('Volunteer\VolunteerController@profile');
     }
@@ -62,6 +72,9 @@ class LoginController extends Controller
                 break;
             case 2:
                 $message = 'You must re-enter your badge number to access that page.';
+                break;
+            case 3:
+                $message = 'You must log in from an approved location.';
                 break;
         }
 

@@ -46,6 +46,7 @@ class SuperAdminController extends Controller
         ]);
 
         $user->save();
+        session()->flash('admin-success', 'Added user: ' . $user->name);
         return redirect('admin/super/users');
     }
 
@@ -53,6 +54,7 @@ class SuperAdminController extends Controller
     {
         $userToRemove = User::find($id);
         $userToRemove->delete();
+        session()->flash('admin-error', 'Removed user: ' . $userToRemove->name);
         return redirect('admin/super/users');
     }
 
@@ -78,6 +80,7 @@ class SuperAdminController extends Controller
             'name' => 'required|unique:types',
         ]);
         Type::create(['name' => $request->name]);
+        session()->flash('admin-success', 'Type added successfully.');
         return redirect('admin/super/dashboard');
     }
 
@@ -87,6 +90,7 @@ class SuperAdminController extends Controller
             'name' => 'required|unique:departments',
         ]);
         Department::create(['name' => $request->name]);
+        session()->flash('admin-success', 'Department added successfully.');
         return redirect('admin/super/dashboard');
     }
 
@@ -96,24 +100,28 @@ class SuperAdminController extends Controller
             'ip_address' => 'required|unique:locations',
         ]);
         Location::create(['ip_address' => $request->ip_address]);
+        session()->flash('admin-success', 'Location added successfully.');
         return redirect('admin/super/dashboard');
     }
 
     public function removeLocation($id)
     {
         Location::destroy($id);
+        session()->flash('admin-error', 'Location removed successfully.');
         return redirect('admin/super/dashboard');
     }
 
     public function removeType($id)
     {
         Type::destroy($id);
+        session()->flash('admin-error', 'Type removed successfully.');
         return redirect('admin/super/dashboard');
     }
 
     public function removeDepartment($id)
     {
         Department::destroy($id);
+        session()->flash('admin-error', 'Department removed successfully.');
         return redirect('admin/super/dashboard');
     }
 }

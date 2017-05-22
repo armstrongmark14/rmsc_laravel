@@ -17,6 +17,8 @@
 
                 {!! Form::open(['method' => 'POST', 'action' => 'Volunteer\LoginController@loginCheck']) !!}
 
+                {!! Form::hidden('ip_address', $_SERVER['REMOTE_ADDR']) !!}
+
                 <div class="form-group col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
                     {!! Form::label('badge', 'Badge Number:') !!}
                     {!! Form::number('badge', null, ['id' => 'loginBadge', 'class' => 'form-control', 'autocomplete' => 'off', 'autofocus' => 'autofocus']) !!}

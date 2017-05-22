@@ -75,6 +75,12 @@
         </tr>
         <tr>
             <td>
+                {!! Form::label('image', 'Photo:') !!}
+                {!! Form::file('image', ['id' => 'image', 'class' => 'form-control']) !!}
+            </td>
+        </tr>
+        <tr>
+            <td>
                 {!! Form::label('type', 'Type:') !!}
                 {!! Form::select('type', $types, isset($volunteer) ? $volunteer->type_id : null, ['class' =>'form-control']) !!}
             </td>
@@ -105,12 +111,6 @@
         </tr>
         <tr>
             <td>
-                {!! Form::label('image', 'Photo:') !!}
-                {!! Form::file('image', ['id' => 'image', 'class' => 'form-control']) !!}
-            </td>
-        </tr>
-        <tr>
-            <td>
                 {!! Form::label('emergency_contact', 'Emergency Contact:') !!}
                 {!! Form::text('emergency_contact', null, ['id' => 'emergency_contact', 'class' => 'form-control', 'autocomplete' => 'off']) !!}
             </td>
@@ -123,8 +123,14 @@
         </tr>
         <tr>
             <td>
-                {!! Form::label('background', 'Background:') !!}
-                {!! Form::checkbox('background', null, ['id' => 'background', 'class' => 'form-control', 'autocomplete' => 'off']) !!}
+                {!! Form::label('background', 'Background Check:') !!}
+                {!! Form::checkbox('background', 1) !!}
+            </td>
+        </tr>
+        <tr>
+            <td>
+                {!! Form::label('limited', 'Location Limited:') !!}
+                {!! Form::checkbox('limited', 1) !!}
             </td>
         </tr>
         <tr>

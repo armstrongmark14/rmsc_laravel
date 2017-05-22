@@ -29,7 +29,10 @@ class VolunteerTableSeeder extends Seeder
             'zip' => '14618',
             'emergency_contact' => 'Mom',
             'emergency_phone' => '555-555-5555',
-            'note_id' => 2
+            'note_id' => 2,
+            'skill_id' => 1,
+            'limited' => 1,
+            'background' => 1
         ]);
 
         Volunteer::create([
@@ -47,7 +50,11 @@ class VolunteerTableSeeder extends Seeder
             'state' => 'NY',
             'zip' => '14618',
             'emergency_contact' => 'Donald Trump',
-            'emergency_phone' => '555-555-5555'
+            'emergency_phone' => '555-555-5555',
+            'note_id' => 1,
+            'skill_id' => 1,
+            'limited' => 0,
+            'background' => 0
         ]);
     }
 }

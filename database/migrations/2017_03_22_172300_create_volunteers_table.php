@@ -37,6 +37,8 @@ class CreateVolunteersTable extends Migration
             // Some last minute additions to the table
             $table->integer('note_id')->unsigned()->default(1);
             $table->integer('skill_id')->unsigned()->default(1);
+            $table->tinyInteger('limited')->default(0);
+            $table->tinyInteger('background')->default(0);
 
             // The default created at/updated at timestamps
             $table->timestamps();

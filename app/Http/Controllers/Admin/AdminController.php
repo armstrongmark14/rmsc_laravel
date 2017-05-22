@@ -53,9 +53,12 @@ class AdminController extends Controller
         // Handling the note & skill updating
         $this->updateNote($request, $volunteer);
         $this->updateSkill($request, $volunteer);
+        $this->updateLimited($request, $volunteer);
+        $this->updateBackground($request, $volunteer);
 
         $volunteer->save();
-        return redirect()->action('Admin\AdminController@volunteerProfile', ['id' => $volunteer->id]);
+
+        return redirect()->route('volunteer-profile', ['id' => $volunteer->id]);
     }
 
 
@@ -75,13 +78,14 @@ class AdminController extends Controller
             $photo = Photo::create(['filename' => $name]);
             $volunteer->photo_id = $photo->id;
         }
-//
-//        dd($request);
 
-
-
+        // Handling the note/skill/location/background updating
+//        $this->updateLimited($request, $volunteer);
+        $this->createNote($request, $volunteer);
+        $this->createSkill($request, $volunteer);
         $volunteer->save();
-        return $this->volunteerProfile($volunteer->id);
+
+        return redirect()->route('volunteer-profile', ['id' => $volunteer->id]);
     }
 
     /**
@@ -202,6 +206,28 @@ class AdminController extends Controller
         return view('admin.page.currently-here', compact('volunteers'));
     }
 
+    private function createNote(Request $request, Volunteer $volunteer)
+    {
+        if ($request->note != null && strcmp(trim($request->note), 'default') != 0) {
+            $note = Note::create(['value' => $request->note]);
+            $note->save();
+            $volunteer->note_id = $note->id;
+        }
+    }
+
+    public function createSkill(Request $request, Volunteer $volunteer)
+    {
+        if ($request->skill != null && strcmp(trim($request->skill), 'default') != 0) {
+            $skill = Skill::create(['value' => $request->skill]);
+            $skill->save();
+            $volunteer->skill_id = $skill->id;
+        }
+    }
+
+
+
+
+
     /**
      * Uses the inputs to update a note if needed when editing volunteer info
      * @param Request $request
@@ -209,7 +235,7 @@ class AdminController extends Controller
      */
     private function updateNote(Request $request, Volunteer $volunteer)
     {
-        if ($request->note_id != 1) {
+        if (isset($request->note_id)) {
             $note = Note::find($request->note_id);
             $note->value = $request->note;
             $note->save();
@@ -217,6 +243,23 @@ class AdminController extends Controller
             $note = Note::create(['value' => $request->note]);
             $note->save();
             $volunteer->note_id = $note->id;
+        }
+    }
+
+    private function updateLimited(Request $request, Volunteer $volunteer)
+    {
+        $volunteer->limited = 0;
+
+        if ($request->limited == 1) {
+            $volunteer->limited = 1;
+        }
+    }
+    private function updateBackground(Request $request, Volunteer $volunteer)
+    {
+        $volunteer->background = 0;
+
+        if ($request->background == 1) {
+            $volunteer->background = 1;
         }
     }
 
@@ -231,6 +274,19 @@ class AdminController extends Controller
             $skill = Skill::find($request->skill_id);
             $skill->value = $request->skill;
             $skill->save();
+        } else if ($request->skill_id == 1 && strcmp(trim($request->skill), 'default') != 0) {
+            $skill = Skill::create(['value' => $request->skill]);
+            $skill->save();
+            $volunteer->skill_id = $skill->id;
+        }
+    }
+
+    private function updateLocationLimited(Request $request, Volunteer $volunteer)
+    {
+        if (strcmp('yes', $request->limited) == 0) {
+            $limited = Limited::find($request->skill_id);
+            $limited->volunteer_id = $request->skill;
+            $limited->save();
         } else if ($request->skill_id == 1 && strcmp(trim($request->skill), 'default') != 0) {
             $skill = Skill::create(['value' => $request->skill]);
             $skill->save();

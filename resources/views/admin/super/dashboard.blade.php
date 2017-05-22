@@ -2,9 +2,9 @@
 
 @section('content')
 
-    @include('templates.errors.error-messages')
-
     @include('templates.admin.side-navigation')
+
+    @include('templates.errors.error-messages')
 
     <div class="col-md-10">
         <div class="panel panel-default">
@@ -83,7 +83,7 @@
 
                     <table class="table table-striped table-bordered">
                         <tr>
-                            <th>Type</th>
+                            <th>IP</th>
                             <th>Remove</th>
                         </tr>
                         @foreach ($locations as $location)

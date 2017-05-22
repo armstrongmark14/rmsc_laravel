@@ -26,6 +26,8 @@ class Volunteer extends Model
         'supervisor',
         'note_id',
         'skill_id',
+        'limited',
+        'background'
     ];
 
 
@@ -66,6 +68,11 @@ class Volunteer extends Model
     private function getLatestTimesheet()
     {
         return $this->timesheets()->orderBy('in', 'ASC')->first();
+    }
+
+    public function isLocationLimited()
+    {
+        return $this->limited == 1;
     }
 
     /**

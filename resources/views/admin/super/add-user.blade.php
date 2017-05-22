@@ -2,9 +2,9 @@
 
 @section('content')
 
-    @include('templates.errors.error-messages')
-
     @include('templates.admin.side-navigation')
+
+    @include('templates.errors.error-messages')
 
     <div class="col-md-4 col-md-offset-3">
         <div class="panel panel-default">
