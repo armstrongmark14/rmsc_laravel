@@ -25,7 +25,7 @@ class LoginController extends Controller
     }
 
     /**
-     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector will check if success login
+     * Will check if successful login and redirect accordingly
      */
     public function loginCheck(Request $request)
     {

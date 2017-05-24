@@ -13,9 +13,8 @@ use Illuminate\Support\Facades\Hash;
 
 class SuperAdminController extends Controller
 {
-    //
     /**
-     * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View displays the super admin dash
+     * Displays the super admin dashboard where Types/Departments/Locations can be added & removed
      */
     public function dashboard()
     {
@@ -25,12 +24,18 @@ class SuperAdminController extends Controller
         return view('admin.super.dashboard', compact('types', 'departments', 'locations'));
     }
 
+    /**
+     * Displays the add user page
+     */
     public function addUserPage()
     {
         $permissions = Permission::orderBy('name', 'ASC')->pluck('name', 'id');
         return view('admin.super.add-user', compact('permissions'));
     }
 
+    /**
+     * After the form is submitted, this function will add that user to the database
+     */
     public function addUser(Request $request)
     {
         $this->validate($request, [
@@ -50,6 +55,9 @@ class SuperAdminController extends Controller
         return redirect('admin/super/users');
     }
 
+    /**
+     * Takes in a user id and will remove that user from the database
+     */
     public function removeUser($id)
     {
         $userToRemove = User::find($id);
@@ -58,6 +66,9 @@ class SuperAdminController extends Controller
         return redirect('admin/super/users');
     }
 
+    /**
+     * Displays the manage users page
+     */
     public function manageUsers()
     {
         $users = User::all();
@@ -65,6 +76,9 @@ class SuperAdminController extends Controller
         return view('admin.super.manage-users', compact('users', 'permissions'));
     }
 
+    /**
+     * This will be called if a form is submitted to change a user's permission level
+     */
     public function changePermissions(Request $request)
     {
         $user = User::find($request->user_id);

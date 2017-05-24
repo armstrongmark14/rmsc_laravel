@@ -82,6 +82,7 @@
         function blankAJAXRequest(elementId, location) {
             // getting the element we'll fill
             var target = document.getElementById(elementId);
+            // getting the location of the script we're going to run
             var location = 'http://localhost/laravel/rmsc/public/admin/homepage/' + elementId;
 
             // Making the request
@@ -89,7 +90,6 @@
             request.onreadystatechange = function() {
                 if (request.readyState == 4 && request.status == 200) {
                     target.innerHTML = request.responseText;
-//                    alert(request.responseText);
                 }
             }
 
@@ -128,13 +128,13 @@
             getCurrentCount();
             getTodaysHours();
 
-        }, 15000); // Should update every 15 seconds
+        }, 15000); // Should update every minute
 
         // These grand totals will update much slower than the smaller queries
         setInterval(function() {
             getTotalHours();
             getTotalLogins();
-        }, 180000); // Should update every 3 minutes
+        }, 600000); // Should update every 10 minutes
 
 
 

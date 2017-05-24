@@ -40,7 +40,12 @@ class LoginController extends Controller
     {
         // Checks to see if the badge is a valid #, then redirects if no/yes
         if (! Volunteer::where('badge', '=', $request->badge)->exists()) {
-            return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 1]);
+            // If we have an unknown badge and are on-location, allow them to create a new one
+            if (Location::where('ip_address', '=', $request->ip_address)->exists()) {
+                return redirect()->action('Admin\AdminController@newBadge', ['badge' => $request->badge]);
+            }
+            // Else back to the login page with an error message
+            return redirect()->route('new-badge', ['id' => 1]);
         }
 
         // Now we know we have a volunteer so we can store their info

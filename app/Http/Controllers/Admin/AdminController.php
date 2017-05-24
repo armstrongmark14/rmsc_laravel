@@ -129,6 +129,9 @@ class AdminController extends Controller
         return view('admin.volunteer.profile', compact('volunteer', 'departments', 'types'));
     }
 
+    /**
+     * Page for admins to edit timesheets
+     */
     public function editTimesheet($id)
     {
         $timesheet = Timesheet::find($id);
@@ -136,6 +139,9 @@ class AdminController extends Controller
         return view('admin.volunteer.edit.timesheet', compact('volunteer', 'timesheet'));
     }
 
+    /**
+     * This will be called after an edit timesheet form is submitted
+     */
     public function updateTimesheet(Request $request)
     {
         $this->validate($request, [
@@ -172,6 +178,9 @@ class AdminController extends Controller
         return view('admin.volunteer.timesheet', compact('volunteer', 'timesheets', 'editTimesheets'));
     }
 
+    /**
+     * This will display a table of all the un-clocked-out timesheets
+     */
     public function openTimesheets()
     {
         $timesheets = Timesheet::whereRaw('timesheets.in = timesheets.out')->orderBy('timesheets.in', 'DESC')->get();
@@ -223,6 +232,9 @@ class AdminController extends Controller
         return view('admin.page.currently-here', compact('volunteers'));
     }
 
+    /**
+     * Will create a skill
+     */
     private function createNote(Request $request, Volunteer $volunteer)
     {
         if ($request->note != null && strcmp(trim($request->note), 'default') != 0) {
@@ -295,24 +307,17 @@ class AdminController extends Controller
         }
     }
 
-    private function updateLocationLimited(Request $request, Volunteer $volunteer)
-    {
-        if (strcmp('yes', $request->limited) == 0) {
-            $limited = Limited::find($request->skill_id);
-            $limited->volunteer_id = $request->skill;
-            $limited->save();
-        } else if ($request->skill_id == 1 && strcmp(trim($request->skill), 'default') != 0) {
-            $skill = Skill::create(['value' => $request->skill]);
-            $skill->save();
-            $volunteer->skill_id = $skill->id;
-        }
-    }
-
+    /**
+     * Displays the admin change password page
+     */
     public function changePassword()
     {
         return view('admin.page.change-password');
     }
 
+    /**
+     * This will be called after user submits a password change
+     */
     public function updatePassword(Request $request)
     {
         $user = User::find($request->user_id);
@@ -340,6 +345,41 @@ class AdminController extends Controller
         session()->flash('admin-success', 'Password updated successfully.');
 
         return redirect('admin/home');
+    }
+
+    /**
+     * This will happen when a badge that doesn't exist in database is swiped On Location.
+     * It will go to a page to create a new volunteer entry without logging in as admin, but still requires
+     * admin credentials.
+     */
+    public function newBadge(Request $request)
+    {
+        $departments = Department::orderBy('name', 'ASC')->pluck('name', 'id');
+        $types = Type::orderBy('name', 'ASC')->pluck('name', 'id');
+        $badgeValue = $request->badge;
+        return view('admin.volunteer.swipe-add.add', compact('types', 'departments', 'badgeValue'));
+    }
+
+    /**
+     * The new badge swipe page has been submitted and must be checked and handled
+     */
+    public function newBadgeSubmitted(Request $request)
+    {
+        $this->validate($request, [
+            'username' => 'required',
+            'password' => 'required',
+            'first_name' => 'required'
+        ]);
+
+        if (! Auth::attempt(['name' => $request->username, 'password' => $request->password])) {
+            // They failed admin authentication, have to redirect them
+            session()->flash('admin-error', 'Admin authentication failed. Please try again.');
+            return redirect()->action('Admin\AdminController@newBadge', ['badge' => $request->badge]);
+        }
+
+        $this->createVolunteer($request);
+        session()->flash('volunteer-success', "Volunteer record created successfully! Badge: ". $request->badge ."\nName: ". $request->first_name);
+        return redirect('/');
     }
 
 }

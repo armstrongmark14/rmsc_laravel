@@ -59,6 +59,8 @@ class TimeSheetController extends Controller
         $date = $request->date;
 
         // Validating the date and times the user entered as valid timestamps
+        // These rules aren't perfect, but they at least block letters
+        // Could update later, but I doubt this feature is used much so I'll leave it at this
         if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
             || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
             session()->flash('login-status', 'You must enter a valid date and time.');

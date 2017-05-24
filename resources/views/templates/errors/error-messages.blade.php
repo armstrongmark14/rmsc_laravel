@@ -4,6 +4,12 @@
     </div>
 @endif
 
+@if( Session::has('volunteer-success'))
+    <div class="alert alert-success col-md-8 col-md-offset-2">
+        {{ Session::get('volunteer-success') }}
+    </div>
+@endif
+
 @if( Session::has('admin-error'))
     <div class="alert alert-danger col-md-8 col-md-offset-1">
         {{ Session::get('admin-error') }}
