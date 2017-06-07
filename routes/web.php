@@ -17,7 +17,6 @@ Route::get('/', array('as' => 'home', 'uses' => 'Volunteer\LoginController@login
 
 // Grouping these together so that if user tries to access page without submitting form it redirects
 Route::any('/volunteer/login', 'Volunteer\LoginController@loginCheck');
-
 // Route for login failures
 Route::get('/volunteer/login/failure/{id}', 'Volunteer\LoginController@loginFailure');
 
@@ -62,6 +61,7 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
 
         // Full volunteer List
         Route::get('/admin/volunteer-list', array('as' => 'admin-volunteer-list', 'uses' => 'AdminController@fullVolunteerList'));
+
         // Currently Here volunteer list
         Route::get('/admin/volunteers-here', ['as' => 'volunteers-here' , 'uses' => 'AdminController@currentlyHere']);
         // Showing all of the currently open timesheets

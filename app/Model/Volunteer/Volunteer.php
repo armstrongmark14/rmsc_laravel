@@ -75,6 +75,11 @@ class Volunteer extends Model
         return $this->limited == 1;
     }
 
+    public function getFullName()
+    {
+        return $this->first_name . " " . $this->last_name;
+    }
+
     /**
      * Gets the type of this particular volunteer
      *

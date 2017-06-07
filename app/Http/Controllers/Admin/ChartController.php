@@ -62,7 +62,7 @@ class ChartController extends Controller
      */
     public function updateHomeTotalLogins()
     {
-        $totalTimesheets = DB::select(DB::raw("SELECT COUNT(id) as num_rows FROM timesheets;"));
+        $totalTimesheets = DB::select(DB::raw("SELECT FORMAT(COUNT(id), 0) as num_rows FROM timesheets;"));
 
         return $totalTimesheets[0]->num_rows;
     }
@@ -73,7 +73,7 @@ class ChartController extends Controller
     public function updateHomeTotalHours()
     {
         $totalHours = DB::select(DB::raw("
-          SELECT ROUND(SUM(TIMESTAMPDIFF(MINUTE, timesheets.in, timesheets.out) / 60), 2) as hours 
+          SELECT FORMAT(SUM(TIMESTAMPDIFF(MINUTE, timesheets.in, timesheets.out) / 60), 0) as hours 
           FROM timesheets;"));
         return $totalHours[0]->hours;
     }

@@ -9,8 +9,9 @@ use App\Http\Controllers\Controller;
 
 class TimeSheetController extends Controller
 {
-    //
-
+    /**
+     * Creates a new timesheet and fills it with the current time
+     */
     public function clockIn()
     {
         $volId = session('volunteer-logged-in')->id;
@@ -20,6 +21,9 @@ class TimeSheetController extends Controller
         return redirect('/');
     }
 
+    /**
+     * This will clock the volunteer out and update their latest open timesheet from today to close it at this time
+     */
     public function clockOut()
     {
         $timesheet = session('volunteer-logged-in')->hasOpenTimesheet();
@@ -28,11 +32,17 @@ class TimeSheetController extends Controller
         return redirect('/');
     }
 
+    /**
+     * Will be called after a volunteer clocks in or out to show them on the login page
+     */
     public function timeclockMessage($name, $message)
     {
         session()->flash('timeclock', $name . ' clocked ' . $message . ' at ' . substr(Timesheet::now(), 10, 18));
     }
 
+    /**
+     * Displays the edit timesheet page to volunteers that have access to that functionality
+     */
     public function edit($id)
     {
         $timesheet = Timesheet::find($id);
@@ -40,6 +50,11 @@ class TimeSheetController extends Controller
         return view('volunteer.time.edit', compact('volunteer', 'timesheet'));
     }
 
+    /**
+     * When a volunteer who has privilege to update their timesheets submits one, this function will
+     * 1) Check if everything is in the right format
+     * 2) Update the timesheet record
+     */
     public function updateTimesheet(Request $request)
     {
         $this->validate($request, [

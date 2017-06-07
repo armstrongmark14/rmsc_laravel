@@ -128,7 +128,7 @@
             getCurrentCount();
             getTodaysHours();
 
-        }, 15000); // Should update every minute
+        }, 30000); // Should update every 30 seconds
 
         // These grand totals will update much slower than the smaller queries
         setInterval(function() {

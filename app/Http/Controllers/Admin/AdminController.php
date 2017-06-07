@@ -215,7 +215,17 @@ class AdminController extends Controller
      */
     public function fullVolunteerList()
     {
-        $volunteers = Volunteer::all();
+        // This works much faster than just getting all records laravel style. Much, much faster.
+        $volunteers = DB::table('volunteers')
+            ->join('departments', 'departments.id', 'volunteers.department_id')
+            ->join('types', 'types.id', 'volunteers.type_id')
+            ->join('notes', 'notes.id', 'volunteers.note_id')
+            ->join('skills', 'skills.id', 'volunteers.skill_id')
+            ->join('photos', 'photos.id', 'volunteers.photo_id')
+            ->select('volunteers.*', 'departments.name as department', 'types.name as type', 'notes.value as note', 'skills.value as skill', 'photos.filename as filename')
+            ->orderBy('badge', 'ASC')
+            ->get();
+
         return view('admin.page.volunteer-list', compact('volunteers'));
     }
 

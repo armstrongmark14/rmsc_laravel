@@ -10,7 +10,7 @@
         <div class="panel panel-default">
             <div class="panel-heading">RMSC Admin - Volunteers Currently Here</div>
             <div class="panel-body">
-                @include('templates.admin.volunteer-table')
+                @include('templates.admin.currently-here-table')
             </div>
         </div>
     </div>
