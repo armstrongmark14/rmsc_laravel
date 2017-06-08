@@ -115,22 +115,6 @@
                         </tr>
                     </table>
 
-                    <table class="table table-no-border">
-                        <tr>
-                            <td>
-                                {!! Form::label('username', 'Admin Username:') !!}
-                                {!! Form::text('username', null, ['id' => 'username', 'class' => 'form-control', 'autocomplete' => 'off']) !!}
-                            </td>
-                        </tr>
-                        <tr>
-                            <td>
-                                {!! Form::label('password', 'Admin Password:') !!}
-                                {!! Form::password('password', ['id' => 'password', 'class' => 'form-control', 'autocomplete' => 'off']) !!}
-                            </td>
-                        </tr>
-                    </table>
-
-
                 </div>
 
                 <div class="form-group text-center">

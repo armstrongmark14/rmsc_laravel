@@ -39,8 +39,13 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
     Route::get('/volunteer/timeclock/edit-timesheet/{id}', array('as' => 'volunteer-edit-timesheet', 'uses' => 'Volunteer\TimesheetController@edit'));
     Route::post('/volunteer/timeclock/update-timesheet', array('as' => 'volunteer-update-timesheet', 'uses' => 'Volunteer\TimesheetController@updateTimesheet'));
 
+
+
     // Route for entering a new badge and creating an entry
-    Route::get('admin/volunteer/add-new', ['as' => 'new-badge', 'uses' => 'Admin\AdminController@newBadge']);
+    Route::get('admin/volunteer/add-new', ['as' => 'new-badge', 'uses' => 'Admin\AdminController@newBadgeSwiped']);
+    // This route will just be for redirecting someone trying to access the new-volunteer-swipe page unofficially
+    Route::get('admin/volunteer/add-volunteer', ['as' => 'reject-add-swipe', 'uses' => 'Admin\AdminController@rejectAddSwipe']);
+    Route::post('admin/volunteer/add-volunteer', ['as' => 'new-volunteer-swipe', 'uses' => 'Admin\AdminController@newBadge']);
     Route::post('admin/volunteer/add-new/submitted', ['as' => 'new-badge-submitted', 'uses' => 'Admin\AdminController@newBadgeSubmitted']);
 
 

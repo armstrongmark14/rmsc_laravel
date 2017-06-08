@@ -45,7 +45,7 @@
             <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
                 <i class="fa fa-bars" aria-hidden="true"></i>
             </button>
-            <a class="navbar-brand" href="/"><img id="logo" src="/laravel/rmsc/public/images/logo-small.png" height="50px" width="200px"></a>
+            <a class="navbar-brand" href="/"><img id="logo" src="/images/logo-small.png" height="50px" width="200px"></a>
         </div>
         <div class="collapse navbar-collapse" id="myNavbar">
             <ul class="nav navbar-nav">

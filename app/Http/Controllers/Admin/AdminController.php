@@ -357,6 +357,25 @@ class AdminController extends Controller
         return redirect('admin/home');
     }
 
+
+
+    /*
+     * Below are functions for adding a new badge when one is swiped that isn't in the database.
+     * These functions are pretty ghetto because I doubt they'll be used often.
+     */
+
+    public function rejectAddSwipe()
+    {
+        session()->flash('login-status', 'You do not have access to that page without admin credentials.');
+        return redirect('/');
+    }
+
+    public function newBadgeSwiped(Request $request)
+    {
+        $badgeValue = $request->badge;
+        return view('admin.volunteer.swipe-add.admin-login', compact('badgeValue'));
+    }
+
     /**
      * This will happen when a badge that doesn't exist in database is swiped On Location.
      * It will go to a page to create a new volunteer entry without logging in as admin, but still requires
@@ -364,27 +383,42 @@ class AdminController extends Controller
      */
     public function newBadge(Request $request)
     {
+        echo $request->alreadyValidated;
+        /*
+         * First have to check if the admin login is correct
+         * I'm using a ghetto version of the admin login and not creating a user since I don't want them to
+         * be logged in for more than just this one page when they do this.
+        */
+        try {
+            $user = User::where('name', '=', $request->username)->firstOrFail();
+        }
+        catch (\Exception $e) {
+            session()->flash('login-status', 'Please enter a valid username.');
+            return redirect('/admin/volunteer/add-new?badge=' . $request->badgeValue);
+        }
+
+        if (! $user->checkPassword($request->password)) {
+            session()->flash('login-status', 'Please enter a correct password.');
+            return redirect('/admin/volunteer/add-new?badge=' . $request->badgeValue);
+        }
+
+        // Since admin credentials check out, we can show the add volunteer page
         $departments = Department::orderBy('name', 'ASC')->pluck('name', 'id');
         $types = Type::orderBy('name', 'ASC')->pluck('name', 'id');
-        $badgeValue = $request->badge;
+        $badgeValue = $request->badgeValue;
         return view('admin.volunteer.swipe-add.add', compact('types', 'departments', 'badgeValue'));
     }
 
     /**
-     * The new badge swipe page has been submitted and must be checked and handled
+     * The new badge swipe page has been submitted and must be checked and handled.
+     * Only checking that there's a first name, because nobody cares about having complete data :(
      */
     public function newBadgeSubmitted(Request $request)
     {
-        $this->validate($request, [
-            'username' => 'required',
-            'password' => 'required',
-            'first_name' => 'required'
-        ]);
-
-        if (! Auth::attempt(['name' => $request->username, 'password' => $request->password])) {
-            // They failed admin authentication, have to redirect them
-            session()->flash('admin-error', 'Admin authentication failed. Please try again.');
-            return redirect()->action('Admin\AdminController@newBadge', ['badge' => $request->badge]);
+        // Doing my own validation since the ghetto login breaks laravel validation methods
+        if ($request->first_name == null) {
+            session()->flash('login-status', 'First Name is required.');
+            return redirect('/admin/volunteer/add-new?badge=' . $request->badge);
         }
 
         $this->createVolunteer($request);

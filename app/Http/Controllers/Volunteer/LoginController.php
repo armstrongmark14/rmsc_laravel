@@ -42,7 +42,7 @@ class LoginController extends Controller
         if (! Volunteer::where('badge', '=', $request->badge)->exists()) {
             // If we have an unknown badge and are on-location, allow them to create a new one
             if (Location::where('ip_address', '=', $request->ip_address)->exists()) {
-                return redirect()->action('Admin\AdminController@newBadge', ['badge' => $request->badge]);
+                return redirect()->action('Admin\AdminController@newBadgeSwiped', ['badge' => $request->badge]);
             }
             // Else back to the login page with an error message
             return redirect()->route('new-badge', ['id' => 1]);
