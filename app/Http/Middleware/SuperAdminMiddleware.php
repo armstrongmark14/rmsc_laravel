@@ -21,7 +21,7 @@ class SuperAdminMiddleware
 
         if (Auth::user()->permission->level != 1337) {
             // Redirect to login if there is no user
-            session()->flash('login-status', 'Sorry, you lack privileges for that page.');
+            session()->flash('admin-error', 'Sorry, you lack privileges for that page.');
             return redirect('/admin/home');
         }
         else {

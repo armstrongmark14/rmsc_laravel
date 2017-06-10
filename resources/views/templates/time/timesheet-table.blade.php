@@ -12,6 +12,7 @@
         @if(isset($editTimesheets))
             <th>Name</th>
             <th>Edit</th>
+            <th>Delete</th>
         @endif
     </tr>
     {{-- This will include as many timesheet-rows as we need --}}
@@ -29,6 +30,7 @@
             @if(isset($editTimesheets))
                 <td>{{$timesheet->volunteer->first_name }} {{ $timesheet->volunteer->last_name }}</td>
                 <td><a href="{{ route('admin-edit-timesheet', $timesheet->id) }}">Edit</a></td>
+                <td><a href="{{ route('admin-remove-timesheet', $timesheet->id) }}">Delete</a></td>
             @endif
 
         </tr>

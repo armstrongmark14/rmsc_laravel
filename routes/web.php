@@ -38,6 +38,9 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
     // Routes for editing timesheets as a volunteer
     Route::get('/volunteer/timeclock/edit-timesheet/{id}', array('as' => 'volunteer-edit-timesheet', 'uses' => 'Volunteer\TimesheetController@edit'));
     Route::post('/volunteer/timeclock/update-timesheet', array('as' => 'volunteer-update-timesheet', 'uses' => 'Volunteer\TimesheetController@updateTimesheet'));
+    // Routes for creating timesheets from scratch as a volunteer
+    Route::get('/volunteer/timeclock/create-timesheet', array('as' => 'volunteer-create-timesheet', 'uses' => 'Volunteer\TimesheetController@createTimesheetPage'));
+    Route::post('/volunteer/timeclock/create-timesheet/new', array('as' => 'volunteer-create-timesheet-new', 'uses' => 'Volunteer\TimesheetController@createTimesheet'));
 
 
 
@@ -84,6 +87,7 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
         // Routes for editing timesheets
         Route::get('admin/edit/timesheet/{id}', ['as' => 'admin-edit-timesheet', 'uses' => 'AdminController@editTimesheet']);
         Route::post('admin/update/timesheet', ['as' => 'admin-update-timesheet', 'uses' => 'AdminController@updateTimesheet']);
+        Route::get('admin/remove/timesheet/{id}', ['as' => 'admin-remove-timesheet', 'uses' => 'AdminController@removeTimesheet']);
 
         // Routes for charting charts
         Route::get('admin/charts/total-hours', ['as' => 'total-hours-chart', 'uses' => 'ChartController@totalHours']);

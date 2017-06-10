@@ -40,7 +40,6 @@ class VolunteerController extends Controller
             return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 2]);
         }
         $volunteer = session('volunteer-logged-in');
-//        dd($volunteer);
         $timesheets = Volunteer::find($volunteer->id)->timesheets;
         $volunteerPage = true;
         return view('volunteer.time.timesheets', compact('volunteer', 'timesheets', 'volunteerPage'));

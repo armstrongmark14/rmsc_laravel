@@ -24,6 +24,13 @@
                     <button class="vol-profile-btn btn btn-primary"><i class="fa fa-id-card"></i> View Timesheets</button>
                 </a>
 
+                @if($volunteer->edit_time == 1)
+                    <br><br>
+                    <a href="{{ route('volunteer-create-timesheet') }}">
+                        <button class="vol-profile-btn btn btn-warning"><i class="fa fa-hourglass"></i> Log Hours</button>
+                    </a>
+                @endif
+
             </div>
         </div>
         {{ Form::close() }}

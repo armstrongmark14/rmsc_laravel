@@ -15,7 +15,7 @@
             <div class="panel-heading">Volunteer Login</div>
             <div class="panel-body">
 
-                {!! Form::open(['method' => 'POST', 'action' => 'Volunteer\LoginController@loginCheck']) !!}
+                {!! Form::open(['method' => 'POST', 'id' => 'loginForm', 'action' => 'Volunteer\LoginController@loginCheck']) !!}
 
                 {!! Form::hidden('ip_address', $_SERVER['REMOTE_ADDR']) !!}
 

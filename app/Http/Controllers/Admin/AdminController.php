@@ -167,6 +167,18 @@ class AdminController extends Controller
     }
 
     /**
+     * Will delete a timesheet record from the database
+     */
+    public function removeTimesheet($id)
+    {
+        $timesheet = Timesheet::find($id);
+        $volID = $timesheet->volunteer_id;
+        $timesheet->delete();
+        session()->flash('admin-success', 'Timesheet deleted successfully');
+        return redirect()->route('admin-volunteer-timesheet', $volID);
+    }
+
+    /**
      * @param $id - The volunteer id - NOT BADGE #
      * @return \Illuminate\Contracts\View\Factory|\Illuminate\View\View A list of this volunteers timesheets
      */
