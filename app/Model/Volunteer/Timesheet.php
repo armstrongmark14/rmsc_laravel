@@ -45,7 +45,8 @@ class Timesheet extends Model
      */
     public function clockOut()
     {
-        $this->update(['out' => $this->now()]);
+        $this->out = Timesheet::now();
+        $this->save();
     }
 
     /**

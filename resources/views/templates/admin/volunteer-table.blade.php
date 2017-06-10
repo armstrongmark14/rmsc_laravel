@@ -10,7 +10,7 @@
 
     @foreach ($volunteers as $volunteer)
         <tr>
-            <td><img src="/laravel/rmsc/public/images/volunteers/{{ $volunteer->filename }}" height="50px" width="50px"></td>
+            <td><img src="/images/volunteers/{{ $volunteer->filename }}" height="50px" width="50px"></td>
             <td>{{ $volunteer->badge }}</td>
             <td><a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">{{ $volunteer->first_name . ' ' . $volunteer->last_name }}</a></td>
             <td>{{ $volunteer->department }}</td>

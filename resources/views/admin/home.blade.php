@@ -83,7 +83,7 @@
             // getting the element we'll fill
             var target = document.getElementById(elementId);
             // getting the location of the script we're going to run
-            var location = 'http://localhost/laravel/rmsc/public/admin/homepage/' + elementId;
+            var location = '/admin/homepage/' + elementId;
 
             // Making the request
             var request = new XMLHttpRequest();

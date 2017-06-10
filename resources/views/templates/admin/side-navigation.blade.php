@@ -16,8 +16,6 @@
                 <li><a href="{{ route('admin-add-user') }}"><i class="fa fa-user-plus"></i> Add User</a></li>
                 <li><a href="{{ route('manage-users') }}"><i class="fa fa-wrench"></i> Manage Users</a></li>
                 <li><a href="{{ route('admin-change-password') }}"><i class="fa fa-unlock"></i> Change Password</a></li>
-                <li>&nbsp;</li>
-                <li><a href=""><i class="fa fa-search"></i> Old System</a></li>
             </ul>
         </div>
     </div>

@@ -6,6 +6,7 @@ use App\Model\Volunteer\Timesheet;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
+use Illuminate\Support\Facades\DB;
 
 class TimeSheetController extends Controller
 {
@@ -15,7 +16,7 @@ class TimeSheetController extends Controller
     public function clockIn()
     {
         $volId = session('volunteer-logged-in')->id;
-        $time = Timesheet::now();
+        $time = Timesheet::now()->format("Y-m-d H:i:s");
         Timesheet::create(['volunteer_id' => $volId, 'in' => $time, 'out' => $time]);
         $this->timeclockMessage(session('volunteer-logged-in')->first_name, 'in');
         return redirect('/');
@@ -27,7 +28,8 @@ class TimeSheetController extends Controller
     public function clockOut()
     {
         $timesheet = session('volunteer-logged-in')->hasOpenTimesheet();
-        $timesheet[1] ->clockOut(); // First entry is true/false -> second is timesheet object
+        $timesheet[1]->clockOut();
+
         $this->timeclockMessage(session('volunteer-logged-in')->first_name, 'out');
         return redirect('/');
     }
