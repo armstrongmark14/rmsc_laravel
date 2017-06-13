@@ -84,13 +84,18 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
         // Showing a single volunteer profile
         Route::get('admin/volunteer/{id}/profile', ['as' => 'volunteer-profile', 'uses' => 'AdminController@volunteerProfile']);
         Route::get('admin/volunteer/{id}/timesheet', ['as' => 'admin-volunteer-timesheet', 'uses' => 'AdminController@volunteerTimesheet']);
+
         // Routes for editing timesheets
         Route::get('admin/edit/timesheet/{id}', ['as' => 'admin-edit-timesheet', 'uses' => 'AdminController@editTimesheet']);
         Route::post('admin/update/timesheet', ['as' => 'admin-update-timesheet', 'uses' => 'AdminController@updateTimesheet']);
         Route::get('admin/remove/timesheet/{id}', ['as' => 'admin-remove-timesheet', 'uses' => 'AdminController@removeTimesheet']);
+        Route::get('admin/create/timesheet/{id}', ['as' => 'admin-create-timesheet', 'uses' => 'AdminController@createTimesheetPage']);
+        Route::post('admin/create/timesheet/new', ['as' => 'admin-create-timesheet-submitted', 'uses' => 'AdminController@createTimesheet']);
 
         // Routes for charting charts
         Route::get('admin/charts/total-hours', ['as' => 'total-hours-chart', 'uses' => 'ChartController@totalHours']);
+        Route::get('admin/charts/total-hours-monthly', ['as' => 'total-hours-monthly', 'uses' => 'ChartController@totalHoursMonthly']);
+        Route::get('admin/charts/department-monthly/{id}', ['as' => 'dept-monthly', 'uses' => 'ChartController@departmentMonthlyHours']);
 
         // routes for loading the stuff on the homepage through AJAX
         Route::get('admin/homepage/current-count', 'ChartController@updateHomeVolunteerCount');

@@ -2,9 +2,9 @@
 
 @section('content')
 
-    @include('templates.errors.error-messages')
-
     @include('templates.admin.side-navigation')
+
+    @include('templates.errors.error-messages')
 
     <div class="col-md-10">
         <div class="panel panel-default">
@@ -12,6 +12,13 @@
 
                 {{-- Only want to display these links if this is a volunteer profile --}}
                 @if (isset($volunteer))
+                    <a href="/admin/create/timesheet/{{ $volunteer->id }}">
+                        <button class="btn btn-success">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            Create New Timesheet
+                        </button>
+                    </a>
+
                     <a href="{{ route('admin-volunteer-timesheet', ['id' => $volunteer->id]) }}">
                         <button class="btn btn-success">
                             <i class="fa fa-clock-o" aria-hidden="true"></i>

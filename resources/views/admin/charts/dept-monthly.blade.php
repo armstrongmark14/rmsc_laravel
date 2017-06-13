@@ -2,13 +2,13 @@
 
 @section('content')
 
-    @include('templates.admin.side-navigation')
-
     @include('templates.errors.error-messages')
+
+    @include('templates.admin.side-navigation')
 
     <div class="col-md-10">
         <div class="panel panel-default">
-            <div class="panel-heading">RMSC Admin - Total Hours</div>
+            <div class="panel-heading">RMSC Admin - Total Hours for: <b>{{ $totalHours[0]->department }}</b></div>
             <div class="panel-body">
 
                 <style>
@@ -37,22 +37,22 @@
         function drawBasic() {
 
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Date');
+            data.addColumn('date', 'Month');
             data.addColumn('number', 'Total Hours');
 
             data.addRows([
 
-                @foreach ($totalHours as $day)
-                    [
-                        new Date({{ substr($day->day, 0, 4) }}, {{ substr($day->day, 5, 2) - 1 }}, {{substr($day->day, 8, 2) }}),
-                        {{ $day->hours }}
-                    ],
+                    @foreach ($totalHours as $month)
+                [
+                    new Date({{ $month->year }}, {{ $month->month }}),
+                    {{ $month->hours }}
+                ],
                 @endforeach
 
             ]);
 
             var options = {
-                title: 'Total Volunteer Hours',
+                title: '{{ "Total volunteer hours for: " . $totalHours[0]->department }}',
                 width: 1550,
                 bar: { groupWidth: "90%" },
                 hAxis: {

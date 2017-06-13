@@ -70,6 +70,11 @@ class Volunteer extends Model
         return $this->timesheets()->orderBy('in', 'ASC')->first();
     }
 
+    public function canEditTimesheets()
+    {
+        return ($this->edit_time == 1 || $this->department->id == 11);
+    }
+
     public function isLocationLimited()
     {
         return $this->limited == 1;

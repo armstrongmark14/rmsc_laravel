@@ -12,6 +12,16 @@
                 <span class="profile-name">
                     Timesheets: {{ $volunteer->first_name }} {{ $volunteer->last_name }}
                 </span>
+
+                <span class="align-right">
+                    <a href="/admin/create/timesheet/{{ $volunteer->id }}">
+                        <button class="btn btn-success">
+                            <i class="fa fa-clock-o" aria-hidden="true"></i>
+                            Create New Timesheet
+                        </button>
+                    </a>
+                </span>
+
                 <span class="align-right">
                     <a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">
                         <button id="vol-back-btn" class="btn btn-primary">Back to Profile</button>

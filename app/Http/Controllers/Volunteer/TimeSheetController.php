@@ -67,7 +67,7 @@ class TimeSheetController extends Controller
 
 
         $volunteer = session('volunteer-logged-in');
-        if ($volunteer->edit_time != 1) {
+        if (! $volunteer->canEditTimesheets()) {
             session()->flash('login-status', 'You do not have access to edit timesheets.');
             redirect('/');
         }
@@ -115,7 +115,7 @@ class TimeSheetController extends Controller
 
 
         $volunteer = session('volunteer-logged-in');
-        if ($volunteer->edit_time != 1) {
+        if (! $volunteer->canEditTimesheets()) {
             session()->flash('login-status', 'You do not have access to edit timesheets.');
             redirect('/');
         }

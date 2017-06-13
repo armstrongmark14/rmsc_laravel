@@ -139,6 +139,44 @@ class AdminController extends Controller
         return view('admin.volunteer.edit.timesheet', compact('volunteer', 'timesheet'));
     }
 
+    public function createTimesheetPage($id)
+    {
+        $volunteer = Volunteer::find($id);
+        $date = Timesheet::now();
+        return view('admin.page.create-timesheet', compact('volunteer', 'date'));
+    }
+
+    public function createTimesheet(Request $request)
+    {
+        $this->validate($request, [
+            'date' => 'required|date|min:10|max:10',
+            'in' => 'required|min:8|max:8',
+            'out' => 'required|min:8|max:8'
+        ]);
+
+        // Validating the date and times the user entered as valid timestamps
+        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $request->date .' '. $request->in)
+            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $request->date .' '. $request->out)) {
+            session()->flash('login-status', 'You must enter a valid date and time.');
+            return redirect('/admin/create/timesheet');
+        }
+
+        if (!Volunteer::where('badge', '=', $request->badge)->exists()) {
+            session()->flash('admin-error', 'You must enter a valid badge number.');
+            return redirect('/admin/create/timesheet');
+        }
+
+        $volunteer = Volunteer::where('badge', '=', $request->badge)->get()[0];
+
+        Timesheet::create([
+            'volunteer_id' => $volunteer->id,
+            'in' => $request->date . ' ' . $request->in,
+            'out' => $request->date . ' ' . $request->out
+        ]);
+
+        return redirect()->route('admin-volunteer-timesheet', $volunteer->id);
+    }
+
     /**
      * This will be called after an edit timesheet form is submitted
      */

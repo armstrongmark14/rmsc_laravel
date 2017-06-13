@@ -21,7 +21,7 @@
 
                 <div class="form-group col-md-6 col-md-offset-3 col-xs-10 col-xs-offset-1">
                     {!! Form::label('badge', 'Badge Number:') !!}
-                    {!! Form::number('badge', null, ['id' => 'loginBadge', 'class' => 'form-control', 'autocomplete' => 'off', 'autofocus' => 'autofocus']) !!}
+                    {!! Form::input('number', 'badge', null, ['id' => 'loginBadge', 'class' => 'form-control', 'autocomplete' => 'off', 'autofocus' => 'autofocus']) !!}
                     <br>
                     <div class="form-group text-center">
                         {!! Form::submit('Login', ['id' => 'vol-login-btn', 'class' => 'btn btn-primary']) !!}
@@ -31,5 +31,19 @@
         </div>
         {{ Form::close() }}
     </div>
+
+    <script src="/js/numeric-plugin.js"></script>
+
+    <script>
+        // Making any keypress go into the input
+        $(document).keypress(function(e){
+            $('#loginBadge').focus();
+        });
+
+        $(document).ready(function(){
+            $('#loginBadge').numeric();
+        });
+
+    </script>
 
 @endsection

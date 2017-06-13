@@ -1,6 +1,6 @@
 <table class="table table-striped table-bordered">
     <tr>
-        <th>Picture</th>
+        {{--<th>Picture</th>--}}
         <th>Badge #</th>
         <th>Name</th>
         <th>Department</th>
@@ -10,7 +10,7 @@
 
     @foreach ($volunteers as $volunteer)
         <tr>
-            <td><img src="/images/volunteers/{{ $volunteer->filename }}" height="50px" width="50px"></td>
+            {{--<td><img src="/images/volunteers/{{ $volunteer->filename }}" height="50px" width="50px"></td>--}}
             <td>{{ $volunteer->badge }}</td>
             <td><a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">{{ $volunteer->first_name . ' ' . $volunteer->last_name }}</a></td>
             <td>{{ $volunteer->department }}</td>

@@ -36,6 +36,13 @@ require __DIR__.'/../bootstrap/autoload.php';
 $app = require_once __DIR__.'/../bootstrap/app.php';
 
 /*
+ * Setting the public path to this directory
+ */
+$app->bind('path.public', function() {
+    return __DIR__;
+});
+
+/*
 |--------------------------------------------------------------------------
 | Run The Application
 |--------------------------------------------------------------------------

@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Model\Volunteer\Department;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
 use App\Http\Controllers\Controller;
@@ -28,6 +29,45 @@ class ChartController extends Controller
 
         return view('admin.charts.total-hours', compact('totalHours'));
     }
+
+    public function totalHoursMonthly()
+    {
+        $totalHours = DB::select(DB::raw("
+            SELECT 
+                YEAR(timesheets.in) as year,
+                MONTH(timesheets.in) as month,
+                ROUND(SUM(TIMESTAMPDIFF(MINUTE, timesheets.in, timesheets.out ) / 60 ), 2) AS hours
+            FROM timesheets
+            GROUP BY YEAR(timesheets.in), MONTH(timesheets.in)
+            ORDER BY YEAR(timesheets.in), MONTH(timesheets.in) ASC;"));
+
+        return view('admin.charts.monthly-hours', compact('totalHours'));
+    }
+
+    /**
+     *  This function is pretty useless since most departments barely have any hours
+     */
+//    public function departmentMonthlyHours($id)
+//    {
+////        dd(Department::find($id)->exists());
+//        if (!Department::find($id)->exists()) {
+//            session()->flash('admin-error', 'You must enter a valid department ID');
+//            return redirect('/admin/charts/department-monthly/3');
+//        }
+//        $totalHours = DB::select(DB::raw("
+//            SELECT
+//                MONTH(timesheets.in) as month,
+//                YEAR(timesheets.in) as year,
+//                ROUND(SUM(TIMESTAMPDIFF(MINUTE, timesheets.in, timesheets.out ) / 60 ), 2) AS hours,
+//                departments.name as department
+//            FROM timesheets
+//            JOIN volunteers ON volunteers.id = timesheets.volunteer_id
+//            JOIN departments ON departments.id = volunteers.department_id
+//            WHERE departments.id = " . $id . "
+//            GROUP BY volunteers.department_id, YEAR(timesheets.in), MONTH(timesheets.in);"));
+//
+//        return view('admin.charts.dept-monthly', compact('totalHours'));
+//    }
 
     /**
      * Will get the value of the volunteers here right now and total volunteers logged in today and return them

@@ -5,7 +5,7 @@
         <th>Time Out</th>
         <th>Hours</th>
 
-        @if (isset($volunteerPage) && $volunteer->edit_time)
+        @if (isset($volunteerPage) && $volunteer->canEditTimesheets())
             <th>Edit</th>
         @endif
 
@@ -23,7 +23,7 @@
             <td>{{ substr($timesheet->displayOut(), 11, 18) }}</td>
             <td>{{ $timesheet->hours() }}</td>
 
-            @if (isset($volunteerPage) && $volunteer->edit_time)
+            @if (isset($volunteerPage) && $volunteer->canEditTimesheets())
                 <td><a href="{{ route('volunteer-edit-timesheet', $timesheet->id) }}">Edit</a></td>
             @endif
 

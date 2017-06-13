@@ -37,16 +37,16 @@
         function drawBasic() {
 
             var data = new google.visualization.DataTable();
-            data.addColumn('date', 'Date');
+            data.addColumn('date', 'Month');
             data.addColumn('number', 'Total Hours');
 
             data.addRows([
 
-                @foreach ($totalHours as $day)
-                    [
-                        new Date({{ substr($day->day, 0, 4) }}, {{ substr($day->day, 5, 2) - 1 }}, {{substr($day->day, 8, 2) }}),
-                        {{ $day->hours }}
-                    ],
+                    @foreach ($totalHours as $month)
+                [
+                    new Date({{ $month->year }}, {{ $month->month }}),
+                    {{ $month->hours }}
+                ],
                 @endforeach
 
             ]);
