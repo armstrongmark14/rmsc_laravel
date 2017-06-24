@@ -69,6 +69,7 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
 
         // Full volunteer List
         Route::get('/admin/volunteer-list', array('as' => 'admin-volunteer-list', 'uses' => 'AdminController@fullVolunteerList'));
+        Route::get('/admin/volunteer-list/quick-links/{id}', array('as' => 'admin-quick-links', 'uses' => 'AdminController@volListQuickLinks'));
 
         // Currently Here volunteer list
         Route::get('/admin/volunteers-here', ['as' => 'volunteers-here' , 'uses' => 'AdminController@currentlyHere']);

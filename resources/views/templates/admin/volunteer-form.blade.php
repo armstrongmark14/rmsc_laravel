@@ -81,14 +81,14 @@
         </tr>
         <tr>
             <td>
-                {!! Form::label('type', 'Type:') !!}
-                {!! Form::select('type', $types, isset($volunteer) ? $volunteer->type_id : null, ['class' =>'form-control']) !!}
+                {!! Form::label('type_id', 'Type:') !!}
+                {!! Form::select('type_id', $types, isset($volunteer) ? $volunteer->type_id : null, ['class' =>'form-control']) !!}
             </td>
         </tr>
         <tr>
             <td>
-                {!! Form::label('department', 'Department:') !!}
-                {!! Form::select('department', $departments, isset($volunteer) ? $volunteer->department_id : null, ['class' =>'form-control']) !!}
+                {!! Form::label('department_id', 'Department:') !!}
+                {!! Form::select('department_id', $departments, isset($volunteer) ? $volunteer->department_id : null, ['class' =>'form-control']) !!}
             </td>
         </tr>
         <tr>
@@ -144,10 +144,15 @@
 
 </div>
 
-<div class="form-group text-center">
-    {!! Form::submit('Update Volunteer', ['class' => 'btn btn-success']) !!}
-</div>
-
+@if (isset($volunteer))
+    <div class="form-group text-center">
+        {!! Form::submit('Update Volunteer', ['class' => 'btn btn-success']) !!}
+    </div>
+@else
+    <div class="form-group text-center">
+        {!! Form::submit('Create Volunteer', ['class' => 'btn btn-success']) !!}
+    </div>
+@endif
 
 
 {{ Form::close() }}

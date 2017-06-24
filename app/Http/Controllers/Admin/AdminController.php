@@ -38,9 +38,6 @@ class AdminController extends Controller
             'email' => 'nullable|email'
         ]);
         $volunteer->update($request->all());
-        $volunteer->department_id = $request->department;
-        $volunteer->type_id = $request->type;
-
 
         // Handling the file upload
         if ($file = $request->file('image')) {
@@ -58,6 +55,8 @@ class AdminController extends Controller
         $this->updateCheckbox('edit_time', $request, $volunteer);
 
         $volunteer->save();
+
+        session()->flash('admin-success', 'Volunteer record updated for Badge: ' . $volunteer->badge . ' Name: ' . $volunteer->first_name);
 
         return redirect()->route('volunteer-profile', ['id' => $volunteer->id]);
     }
@@ -86,7 +85,10 @@ class AdminController extends Controller
 //        $this->updateLimited($request, $volunteer);
         $this->createNote($request, $volunteer);
         $this->createSkill($request, $volunteer);
+
         $volunteer->save();
+
+        session()->flash('admin-success', 'Volunteer record created for Badge: ' . $volunteer->badge . ' Name: ' . $volunteer->first_name);
 
         return redirect()->route('volunteer-profile', ['id' => $volunteer->id]);
     }
@@ -474,6 +476,11 @@ class AdminController extends Controller
         $this->createVolunteer($request);
         session()->flash('volunteer-success', "Volunteer record created successfully! Badge: ". $request->badge ."\nName: ". $request->first_name);
         return redirect('/');
+    }
+
+    public function volListQuickLinks($id)
+    {
+        return 5;
     }
 
 }

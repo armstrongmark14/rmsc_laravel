@@ -44,6 +44,16 @@
             $('#loginBadge').numeric();
         });
 
+
+        // Reloading the page every 2 hours so we don't have an
+        // InvalidCSRFTokenException on the login page since the kiosk
+        // displays this page all day without changing
+        setTimeout(function() {
+            window.location.reload(1);
+        }, 400000);
+
+
+
     </script>
 
 @endsection

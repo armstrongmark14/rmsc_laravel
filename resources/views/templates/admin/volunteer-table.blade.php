@@ -1,4 +1,4 @@
-<table class="table table-striped table-bordered">
+<table id="volunteer-table" class="table table-striped table-bordered">
     <tr>
         {{--<th>Picture</th>--}}
         <th>Badge #</th>
@@ -9,7 +9,7 @@
     </tr>
 
     @foreach ($volunteers as $volunteer)
-        <tr>
+        <tr class="vol-row">
             {{--<td><img src="/images/volunteers/{{ $volunteer->filename }}" height="50px" width="50px"></td>--}}
             <td>{{ $volunteer->badge }}</td>
             <td><a href="{{ route('volunteer-profile', ['id' => $volunteer->id]) }}">{{ $volunteer->first_name . ' ' . $volunteer->last_name }}</a></td>
