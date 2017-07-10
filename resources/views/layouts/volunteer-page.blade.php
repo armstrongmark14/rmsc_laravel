@@ -8,14 +8,13 @@
 
     <!-- Including the RMSC favicon -->
     <link rel="icon" href="/images/structure/favicon.ico">
-
     <!-- FontAwesome icons CDN -->
     <link href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css" rel="stylesheet">
     <!-- Base jQuery -->
     <script src="https://code.jquery.com/jquery-3.1.1.min.js"></script>
     <!-- Bootstrap Core JS -->
     <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
-
+    <!-- Bootstrap minified CSS -->
     <link href="{{asset('css/app.css')}}" rel="stylesheet">
 
     <title>RMSC - Volunteers</title>
