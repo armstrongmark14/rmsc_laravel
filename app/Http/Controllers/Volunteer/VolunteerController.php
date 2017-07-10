@@ -20,9 +20,10 @@ class VolunteerController extends Controller
      */
     public function profile()
     {
-        if (! session()->has('volunteer-logged-in')) {
-            return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 2]);
+        if ($this->loggedInCheck()) {
+            return $this->backToHomepage();
         }
+
         // First pulling and deleting the volunteer from the login session and moving it to the logged-in session
         $volunteer = session('volunteer-logged-in');
         $openTimesheet = $volunteer->hasOpenTimesheet();
@@ -36,14 +37,24 @@ class VolunteerController extends Controller
      */
     public function viewTimesheets()
     {
-        if (! session()->has('volunteer-logged-in')) {
-            return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 2]);
+        if ($this->loggedInCheck()) {
+            return $this->backToHomepage();
         }
+
         $volunteer = session('volunteer-logged-in');
         $timesheets = Volunteer::find($volunteer->id)->timesheets;
         $volunteerPage = true;
         return view('volunteer.time.timesheets', compact('volunteer', 'timesheets', 'volunteerPage'));
     }
 
+    private function loggedInCheck()
+    {
+        return !session()->has('volunteer-logged-in');
+    }
+
+    private function backToHomepage()
+    {
+        return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 2]);
+    }
 
 }

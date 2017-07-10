@@ -474,6 +474,7 @@ class AdminController extends Controller
         }
 
         $this->createVolunteer($request);
+        session()->forget('admin-success');
         session()->flash('volunteer-success', "Volunteer record created successfully! Badge: ". $request->badge ."\nName: ". $request->first_name);
         return redirect('/');
     }

@@ -18,7 +18,7 @@ class TimeSheetController extends Controller
         $volId = session('volunteer-logged-in')->id;
         $time = Timesheet::now()->format("Y-m-d H:i:s");
         Timesheet::create(['volunteer_id' => $volId, 'in' => $time, 'out' => $time]);
-        $this->timeclockMessage(session('volunteer-logged-in')->first_name, 'in');
+        $this->timeclockMessage('in');
         return redirect('/');
     }
 
@@ -29,17 +29,18 @@ class TimeSheetController extends Controller
     {
         $timesheet = session('volunteer-logged-in')->hasOpenTimesheet();
         $timesheet[1]->clockOut();
-
-        $this->timeclockMessage(session('volunteer-logged-in')->first_name, 'out');
+        $this->timeclockMessage('out');
         return redirect('/');
     }
 
     /**
      * Will be called after a volunteer clocks in or out to show them on the login page
      */
-    public function timeclockMessage($name, $message)
+    public function timeclockMessage($message)
     {
-        session()->flash('timeclock', $name . ' clocked ' . $message . ' at ' . substr(Timesheet::now(), 10, 18));
+        $name = session('volunteer-logged-in')->first_name;
+        $time = substr(Timesheet::now(),10,18);
+        session()->flash('timeclock', "{$name} clocked {$message} at {$time}");
     }
 
     /**
@@ -59,31 +60,19 @@ class TimeSheetController extends Controller
      */
     public function updateTimesheet(Request $request)
     {
-        $this->validate($request, [
-            'date' => 'required|date|min:10|max:10',
-            'in' => 'required|min:8|max:8',
-            'out' => 'required|min:8|max:8'
-        ]);
+        $this->validateTimesheet($request);
 
+        if (! $this->canVolunteerEditTime()) {
+            return $this->accessRedirect();
+        }
 
-        $volunteer = session('volunteer-logged-in');
-        if (! $volunteer->canEditTimesheets()) {
-            session()->flash('login-status', 'You do not have access to edit timesheets.');
-            redirect('/');
+        if (! $this->regexTimesheet($request)) {
+            return redirect('/volunteer/timeclock/edit-timesheet/' . $request->id);
         }
 
         $timesheet = Timesheet::find($request->id);
+
         $date = $request->date;
-
-        // Validating the date and times the user entered as valid timestamps
-        // These rules aren't perfect, but they at least block letters
-        // Could update later, but I doubt this feature is used much so I'll leave it at this
-        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
-            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
-            session()->flash('login-status', 'You must enter a valid date and time.');
-            return redirect('/volunteer/timeclock/edit-timesheet/'.$timesheet->id);
-        }
-
         $timesheet->in = $date . ' ' . $request->in;
         $timesheet->out = $date . ' ' . $request->out;
         $timesheet->save();
@@ -107,29 +96,17 @@ class TimeSheetController extends Controller
      */
     public function createTimesheet(Request $request)
     {
-        $this->validate($request, [
-            'date' => 'required|date|min:10|max:10',
-            'in' => 'required|min:8|max:8',
-            'out' => 'required|min:8|max:8'
-        ]);
+        $this->validateTimesheet($request);
 
+        if (! $this->canVolunteerEditTime()) {
+            return $this->accessRedirect();
+        }
 
-        $volunteer = session('volunteer-logged-in');
-        if (! $volunteer->canEditTimesheets()) {
-            session()->flash('login-status', 'You do not have access to edit timesheets.');
-            redirect('/');
+        if (! $this->regexTimesheet($request)) {
+            return redirect('/volunteer/timeclock/create-timesheet');
         }
 
         $date = $request->date;
-
-        // Validating the date and times the user entered as valid timestamps
-        // These rules aren't perfect, but they at least block letters
-        // Could update later, but I doubt this feature is used much so I'll leave it at this
-        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
-            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
-            session()->flash('login-status', 'You must enter a valid date and time.');
-            return redirect('/volunteer/timeclock/create-timesheet');
-        }
         $timesheet = Timesheet::create([
             'volunteer_id' => $request->volunteerID,
                 'in' =>  $date . ' ' . $request->in,
@@ -138,5 +115,53 @@ class TimeSheetController extends Controller
 
         session()->flash('timeclock', 'Timesheet created successfully');
         return redirect('/volunteer/timesheets');
+    }
+
+    /**
+     * Will validate the request to make sure the # characters match
+     * @param Request $request - The timesheet edit/create form request
+     */
+    private function validateTimesheet(Request $request)
+    {
+        $this->validate($request, [
+            'date' => 'required|date|min:10|max:10',
+            'in' => 'required|min:8|max:8',
+            'out' => 'required|min:8|max:8'
+        ]);
+    }
+
+    /**
+     * Check if this volunteer can edit timesheets, if they can't redirect with error
+     * @param bool $failed - Whether or not the previous call has failed test
+     * @return \Illuminate\Http\RedirectResponse|\Illuminate\Routing\Redirector
+     */
+    private function canVolunteerEditTime()
+    {
+        return session('volunteer-logged-in')->canEditTimesheets();
+    }
+    private function accessRedirect()
+    {
+        session()->flash('login-status', 'You do not have access to edit timesheets.');
+        return redirect('/');
+    }
+
+    /**
+     * This is my absolutely terrible regex that basically just blocks letters for now.
+     * Only like 5 people use this feature so it is pretty low priority.
+     * @param Request $request - The edit/create timesheet form submission
+     * @return bool - Whether or not it passed my terrible regex
+     */
+    private function regexTimesheet(Request $request)
+    {
+        $date = $request->date;
+        // Validating the date and times the user entered as valid timestamps
+        // These rules aren't perfect, but they at least block letters
+        // Could update later, but I doubt this feature is used much so I'll leave it at this
+        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
+            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
+            session()->flash('login-status', 'You must enter a valid date and time.');
+            return false;
+        }
+        return true;
     }
 }

@@ -9,7 +9,6 @@
         Welcome to the RMSC!<br>Please swipe your badge or enter your badge #.
     </div>
 
-
     <div class="col-md-6 col-md-offset-3">
         <div class="panel panel-default">
             <div class="panel-heading">Volunteer Login</div>

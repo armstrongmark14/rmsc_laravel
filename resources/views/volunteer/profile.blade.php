@@ -14,7 +14,7 @@
                     </a>
                 </span>
             </div>
-            <div class="vol-profile panel-body">
+            <div id="profileBody" class="vol-profile panel-body">
 
                 @include('templates.time.timeclock-button')
 

@@ -45,13 +45,14 @@ class LoginController extends Controller
                 return redirect()->action('Admin\AdminController@newBadgeSwiped', ['badge' => $request->badge]);
             }
             // Else back to the login page with an error message
-            return redirect()->route('new-badge', ['id' => 1]);
+            session()->flash('login-status', 'Please enter a valid badge number.');
+            return redirect()->route('home');
         }
 
         // Now we know we have a volunteer so we can store their info
         $volunteer = Volunteer::where('badge', '=', $request->badge)->first();
 
-        // Some volunteers have to be location limited, so we check if they need to be and are on location
+        // Some volunteers have to be location limited, so we check if they need to be and are off location
         if ($volunteer->isLocationLimited()
             && !Location::where('ip_address', '=', $request->ip_address)->exists()) {
             return redirect()->action('Volunteer\LoginController@loginFailure', ['id' => 3]);
