@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
+use App\Http\Controllers\Volunteer\TimeSheetController;
 use App\Model\Volunteer\Department;
 use App\Model\Volunteer\Note;
 use App\Model\Volunteer\Photo;
@@ -150,22 +151,18 @@ class AdminController extends Controller
 
     public function createTimesheet(Request $request)
     {
-        $this->validate($request, [
-            'date' => 'required|date|min:10|max:10',
-            'in' => 'required|min:8|max:8',
-            'out' => 'required|min:8|max:8'
-        ]);
+        // Using our other controller to validate instead of copying code
+        $timesheetController = new TimeSheetController();
+        $timesheetController->validateTimesheet($request);
 
         // Validating the date and times the user entered as valid timestamps
-        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $request->date .' '. $request->in)
-            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $request->date .' '. $request->out)) {
-            session()->flash('login-status', 'You must enter a valid date and time.');
-            return redirect('/admin/create/timesheet');
+        if (! $timesheetController->regexTimesheet($request, true)) {
+            return redirect('admin/create/timesheet/'.$request->badge);
         }
 
         if (!Volunteer::where('badge', '=', $request->badge)->exists()) {
             session()->flash('admin-error', 'You must enter a valid badge number.');
-            return redirect('/admin/create/timesheet');
+            return redirect('/admin/create/timesheet/'.$request->badge);
         }
 
         $volunteer = Volunteer::where('badge', '=', $request->badge)->get()[0];
@@ -184,20 +181,16 @@ class AdminController extends Controller
      */
     public function updateTimesheet(Request $request)
     {
-        $this->validate($request, [
-            'date' => 'required|date|min:10|max:10',
-            'in' => 'required|min:8|max:8',
-            'out' => 'required|min:8|max:8'
-        ]);
+        // Using our other controller to validate instead of copying code
+        $timesheetController = new TimeSheetController();
+        $timesheetController->validateTimesheet($request);
 
         $timesheet = Timesheet::find($request->id);
         $date = $request->date;
 
         // Validating the date and times the user entered as valid timestamps
-        if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
-            || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
-            session()->flash('login-status', 'You must enter a valid date and time.');
-            return redirect('/volunteer/timeclock/edit-timesheet/'.$timesheet->id);
+        if (! $timesheetController->regexTimesheet($request, true)) {
+            return redirect('admin/edit/timesheet/'.$request->id);
         }
 
         $timesheet->in = $date . ' ' . $request->in;

@@ -11,7 +11,7 @@
                 <li>&nbsp;</li>
                 <li><a href="{{ route('total-hours-chart') }}"><i class="fa fa-bar-chart"></i> Charts</a></li>
 
-                @if(Auth::user() && Auth::user()->isSuperAdmin()))
+                @if(Auth::user() && Auth::user()->isSuperAdmin())
                     
                 <li>&nbsp;</li>
                 <li><a href="{{ route('super-admin-dashboard') }}"><i class="fa fa-dashboard"></i> Admin Dashboard</a></li>

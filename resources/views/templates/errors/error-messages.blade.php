@@ -34,7 +34,16 @@
 @endif
 
 @if (count($errors) > 0)
-    <div class="alert alert-danger col-lg-10 col-lg-offset-1">
+
+    {{-- Checking if the page is admin page or not
+         and generating the right error width
+     --}}
+    @if(Request::is('admin/*'))
+        <div class="alert alert-danger col-md-8 col-lg-offset-1">
+    @else
+        <div class="alert alert-danger col-md-10 col-lg-offset-1">
+    @endif
+
         <ul>
             @foreach ($errors->all() as $error)
                 <li>{{ $error }}</li>

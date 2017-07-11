@@ -104,6 +104,9 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
         Route::get('admin/homepage/total-logins', 'ChartController@updateHomeTotalLogins');
         Route::get('admin/homepage/total-hours', 'ChartController@updateHomeTotalHours');
 
+        // Routes for changing password
+        Route::get('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@changePassword']);
+        Route::post('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@updatePassword']);
 
 
         /**
@@ -131,10 +134,6 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
             Route::get('admin/super/remove-user/{id}', ['as' => 'remove-admin-user', 'uses' => 'SuperAdminController@removeUser']);
             Route::get('admin/super/add-user', ['as' => 'admin-add-user', 'uses' => 'SuperAdminController@addUserPage']);
             Route::post('admin/super/add-user', ['as' => 'admin-add-user-submit', 'uses' => 'SuperAdminController@addUser']);
-
-            // Routes for changing password
-            Route::get('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@changePassword']);
-            Route::post('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@updatePassword']);
 
             Route::post('admin/super/change-permissions', 'SuperAdminController@changePermissions');
 

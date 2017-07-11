@@ -121,7 +121,7 @@ class TimeSheetController extends Controller
      * Will validate the request to make sure the # characters match
      * @param Request $request - The timesheet edit/create form request
      */
-    private function validateTimesheet(Request $request)
+    public function validateTimesheet(Request $request)
     {
         $this->validate($request, [
             'date' => 'required|date|min:10|max:10',
@@ -151,7 +151,7 @@ class TimeSheetController extends Controller
      * @param Request $request - The edit/create timesheet form submission
      * @return bool - Whether or not it passed my terrible regex
      */
-    private function regexTimesheet(Request $request)
+    public function regexTimesheet(Request $request, $adminPage=false)
     {
         $date = $request->date;
         // Validating the date and times the user entered as valid timestamps
@@ -159,7 +159,13 @@ class TimeSheetController extends Controller
         // Could update later, but I doubt this feature is used much so I'll leave it at this
         if ( ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->in)
             || ! preg_match("/^(\d{4})-(\d{2})-(\d{2}) (\d{2}):(\d{2}):(\d{2})$/", $date .' '. $request->out)) {
-            session()->flash('login-status', 'You must enter a valid date and time.');
+
+            if ($adminPage) {
+                session()->flash('admin-error', 'You must enter a valid date and time.');
+            }
+            else {
+                session()->flash('login-status', 'You must enter a valid date and time.');
+            }
             return false;
         }
         return true;
