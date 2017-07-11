@@ -20,6 +20,8 @@
 
                 <table class="table table-bordered table-striped">
 
+                    {!! Form::hidden('id', $volunteer->id) !!}
+
                     <tr>
                         <td>
                             {!! Form::label('badge', 'Badge:') !!}

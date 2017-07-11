@@ -2,7 +2,7 @@
 
 namespace App\Http\Controllers\Admin;
 
-use App\Http\Controllers\Volunteer\TimeSheetController;
+use App\Http\Controllers\Volunteer\TimesheetController;
 use App\Model\Volunteer\Department;
 use App\Model\Volunteer\Note;
 use App\Model\Volunteer\Photo;
@@ -152,17 +152,17 @@ class AdminController extends Controller
     public function createTimesheet(Request $request)
     {
         // Using our other controller to validate instead of copying code
-        $timesheetController = new TimeSheetController();
+        $timesheetController = new TimesheetController();
         $timesheetController->validateTimesheet($request);
 
         // Validating the date and times the user entered as valid timestamps
         if (! $timesheetController->regexTimesheet($request, true)) {
-            return redirect('admin/create/timesheet/'.$request->badge);
+            return redirect('admin/create/timesheet/'.$request->id);
         }
 
         if (!Volunteer::where('badge', '=', $request->badge)->exists()) {
             session()->flash('admin-error', 'You must enter a valid badge number.');
-            return redirect('/admin/create/timesheet/'.$request->badge);
+            return redirect('/admin/create/timesheet/'.$request->id);
         }
 
         $volunteer = Volunteer::where('badge', '=', $request->badge)->get()[0];
@@ -182,7 +182,7 @@ class AdminController extends Controller
     public function updateTimesheet(Request $request)
     {
         // Using our other controller to validate instead of copying code
-        $timesheetController = new TimeSheetController();
+        $timesheetController = new TimesheetController();
         $timesheetController->validateTimesheet($request);
 
         $timesheet = Timesheet::find($request->id);

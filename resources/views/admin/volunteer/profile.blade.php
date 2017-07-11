@@ -76,7 +76,7 @@
                         </style>
 
 
-                            <a class="col-md-3" href="http://localhost/laravel/rmsc/public/admin/create/timesheet/{{ $volunteer->id }}">
+                            <a class="col-md-3" href="/admin/create/timesheet/{{ $volunteer->id }}">
                                 <button class="btn btn-success">
                                     <i class="fa fa-clock-o" aria-hidden="true"></i>
                                     Create New Timesheet
