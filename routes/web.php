@@ -92,6 +92,8 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
         Route::get('admin/remove/timesheet/{id}', ['as' => 'admin-remove-timesheet', 'uses' => 'AdminController@removeTimesheet']);
         Route::get('admin/create/timesheet/{id}', ['as' => 'admin-create-timesheet', 'uses' => 'AdminController@createTimesheetPage']);
         Route::post('admin/create/timesheet/new', ['as' => 'admin-create-timesheet-submitted', 'uses' => 'AdminController@createTimesheet']);
+        Route::post('admin/create/timesheet/log', ['as' => 'admin-create-timesheet-submitted-log', 'uses' => 'AdminController@createTimesheetLog']);
+
 
         // Routes for charting charts
         Route::get('admin/charts/total-hours', ['as' => 'total-hours-chart', 'uses' => 'ChartController@totalHours']);

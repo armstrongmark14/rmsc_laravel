@@ -171,4 +171,73 @@ class TimeSheetController extends Controller
         }
         return true;
     }
+
+    /**
+     * Allows volunteers and admins to log hours without entering start and end times
+     * @param Request $request - Pass this the $request from the form submission
+     * @param bool $adminVersion - Set to true to enable 24+ hour increments
+     */
+    public function logHours(Request $request, $adminVersion=false)
+    {
+        $hourLimit = 23;
+        if ($adminVersion) {
+            $hourLimit = 500;
+        }
+
+        $this->validate($request, [
+            'date' => 'required|date|min:10|max:10',
+            'hours' => 'required|numeric|between:0,'.$hourLimit,
+            'minutes' => 'nullable|between:0,59|numeric'
+        ]);
+
+        if ($request->hours < 24) {
+            $this->logTimesheet($request->id, $request->date, $request->hours, $request->minutes);
+        }
+        else {
+            // This is admin page, logging more than 24 hours
+            // We'll need to split this to multiple timesheets
+            $hours = $request->hours;
+
+            while($hours > 0) {
+                if ($hours >= 24) {
+                    $hours -= 23;
+                    $this->logTimesheet($request->id, $request->date, 23, 0);
+                }
+                else {
+                    $this->logTimesheet($request->id, $request->date, $hours, $request->minutes);
+                    $hours = 0;
+                }
+            }
+        }
+    }
+
+    /**
+     * Takes in a number and returns a 2-digit number. 1 => 01, 10 => 10
+     * @param $number
+     * @return string
+     */
+    private function twoDigit($number)
+    {
+        return sprintf("%02d", $number);
+    }
+
+    /**
+     * @param $id - The volunteer_id of the volunteer timesheet is for
+     * @param $date - The date they entered
+     * @param $hours - The hours this timesheet is for
+     * @param null $minutes - The minutes this timesheet has
+     */
+    private function logTimesheet($id, $date, $hours, $minutes=null) {
+        $hours = $this->twoDigit($hours);
+        $minutesUsed = "00";
+        if ($minutes != null) {
+            $minutesUsed = $this->twoDigit($minutes);
+        }
+
+        Timesheet::create([
+            'volunteer_id' => $id,
+            'in' => $date . ' 00:00:00',
+            'out' => $date . " {$hours}:{$minutesUsed}:00"
+        ]);
+    }
 }

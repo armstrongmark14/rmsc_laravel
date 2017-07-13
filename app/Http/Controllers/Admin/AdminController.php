@@ -177,6 +177,18 @@ class AdminController extends Controller
     }
 
     /**
+     * Will allow admins to log hours without entering times, and more than 24 hrs at once
+     */
+    public function createTimesheetLog(Request $request)
+    {
+        // Letting the timesheet controller handle all logging of hours
+        $timesheetController = new TimesheetController();
+        $timesheetController->logHours($request, true);
+
+        return redirect()->route('admin-volunteer-timesheet', $request->id);
+    }
+
+    /**
      * This will be called after an edit timesheet form is submitted
      */
     public function updateTimesheet(Request $request)
