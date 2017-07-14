@@ -110,6 +110,11 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
         Route::get('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@changePassword']);
         Route::post('admin/change-password', ['as' => 'admin-change-password', 'uses' => 'AdminController@updatePassword']);
 
+        // Routes for looking at data for old volunteers not in the system anymore
+        Route::get('admin/old-system', ['as' => 'admin-old-system', 'uses' => 'OldSystem@volunteerList']);
+        Route::get('admin/old-system/volunteer/{id}', ['as' => 'admin-old-profile', 'uses' => 'OldSystem@profile']);
+
+
 
         /**
          * ROUTES FOR THE SUPER ADMINS

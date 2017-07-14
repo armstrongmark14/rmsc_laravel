@@ -10,6 +10,8 @@
                 <li><a href="{{ route('admin-create-volunteer') }}"><i class="fa fa-plus-square"></i> Add Volunteer</a></li>
                 <li>&nbsp;</li>
                 <li><a href="{{ route('total-hours-chart') }}"><i class="fa fa-bar-chart"></i> Charts</a></li>
+                <li>&nbsp;</li>
+                <li><a href="{{ route('admin-old-system') }}"><i class="fa fa-folder-open"></i> Old System</a></li>
 
                 @if(Auth::user() && Auth::user()->isSuperAdmin())
                     
