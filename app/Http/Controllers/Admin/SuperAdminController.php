@@ -10,6 +10,7 @@ use App\Http\Controllers\Controller;
 use App\User;
 use App\Model\Admin\Permission;
 use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\DB;
 
 class SuperAdminController extends Controller
 {
@@ -74,6 +75,38 @@ class SuperAdminController extends Controller
         $users = User::all();
         $permissions = Permission::orderBy('name', 'ASC')->pluck('name', 'id');
         return view('admin.super.manage-users', compact('users', 'permissions'));
+    }
+
+    /**
+     * Will retrieve a list of volunteers that have logged in between date ranges
+     */
+    public function hasLoggedInRecently($start, $end)
+    {   
+        // Quick date format checks to hopefully catch most errors.
+        // These should be enough since I'll make a locked down form that feeds into this.
+        // Returning error if length is incorrect
+        if (strlen($start) != 10 || strlen($end) != 10) {
+            return "Incorrect date format. Please try again.";
+        }
+        // Returning error if dashes aren't there
+        if (strcmp('-', substr($start, 4, 1)) != 0 || strcmp('-', substr($start, 7, 1)) != 0
+            || strcmp('-', substr($end, 4, 1)) != 0 || strcmp('-', substr($end, 7, 1)) != 0) {
+            return "No dashes in the right spot.";
+        }
+        // This query is a doozy
+        $query = "SELECT timesheets.in as 'login', volunteers.first_name, volunteers.last_name,";
+        $query .= " departments.name as 'department', volunteers.email, volunteers.id, volunteers.badge,";
+        $query .= " volunteers.phone FROM timesheets";
+        $query .= " JOIN volunteers on volunteers.id = timesheets.volunteer_id";
+        $query .= " JOIN departments on volunteers.department_id = departments.id";
+        $query .= " WHERE (timesheets.in > ? AND timesheets.in < ?)";
+        $query .= " GROUP BY volunteers.id";
+        $query .= " ORDER BY timesheets.in DESC";
+
+        // Prepared statements to stop all those malicious attacks
+        $users = DB::select(DB::raw($query), [$start, $end] );
+
+        return view('admin.super.recent-logins', compact('users', 'start', 'end'));
     }
 
     /**

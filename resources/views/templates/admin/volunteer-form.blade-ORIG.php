@@ -4,7 +4,7 @@
     {!! Form::hidden('id', $volunteer->id) !!}
     {!! Form::hidden('note_id', $volunteer->note->id) !!}
     {!! Form::hidden('skill_id', $volunteer->skill->id) !!}
-    <?php $badgeFormValues = ['id' => 'badge', 'class' => 'form-control']  ?>
+    <?php $badgeFormValues = ['id' => 'badge', 'class' => 'form-control', 'disabled' => 'disabled']  ?>
 @else
     {!! Form::open(['method' => 'POST', 'enctype' => 'multipart/form-data', 'action' => 'Admin\AdminController@createVolunteer']) !!}
     <?php $badgeFormValues = ['id' => 'badge', 'class' => 'form-control']  ?>

@@ -144,6 +144,9 @@ Route::group(['middleware' => 'prevent-back-button'], function() {
 
             Route::post('admin/super/change-permissions', 'SuperAdminController@changePermissions');
 
+            // Routes for obtaining lists of volunteeers that log in during a timeframe
+            Route::get('admin/super/recent/{start}/{end}', 'SuperAdminController@hasLoggedInRecently');
+
 
         });
 
