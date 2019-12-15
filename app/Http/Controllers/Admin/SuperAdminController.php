@@ -96,15 +96,20 @@ class SuperAdminController extends Controller
         // This query is a doozy
         $query = "SELECT timesheets.in as 'login', volunteers.first_name, volunteers.last_name,";
         $query .= " departments.name as 'department', volunteers.email, volunteers.id, volunteers.badge,";
-        $query .= " volunteers.phone FROM timesheets";
+        $query .= " volunteers.phone, t1.hours_worked FROM timesheets";
         $query .= " JOIN volunteers on volunteers.id = timesheets.volunteer_id";
         $query .= " JOIN departments on volunteers.department_id = departments.id";
+        $query .= " JOIN (SELECT SUM(TIMESTAMPDIFF(HOUR, timesheets.in, timesheets.out)) as 'hours_worked', volunteer_id";
+        $query .= "          FROM timesheets";
+        $query .= "          WHERE (timesheets.in > ? AND timesheets.in < ?)";
+        $query .= "          GROUP BY timesheets.volunteer_id)";
+        $query .= "     t1 on t1.volunteer_id = timesheets.volunteer_id";
         $query .= " WHERE (timesheets.in > ? AND timesheets.in < ?)";
         $query .= " GROUP BY volunteers.id";
         $query .= " ORDER BY timesheets.in DESC";
 
         // Prepared statements to stop all those malicious attacks
-        $users = DB::select(DB::raw($query), [$start, $end] );
+        $users = DB::select(DB::raw($query), [$start, $end, $start, $end] );
 
         return view('admin.super.recent-logins', compact('users', 'start', 'end'));
     }

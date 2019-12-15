@@ -17,6 +17,7 @@
                     <tr>
                         <th>Recent Login</th>
                         <th>Badge #</th>
+                        <th>Hours Worked</th>
                         <th>First Name</th>
                         <th>Last Name</th>
                         <th>Department</th>
@@ -28,6 +29,7 @@
                         <tr>
                             <td>{{ $user->login }}</td>
                             <td>{{ $user->badge }}</td>
+                            <td>{{ $user->hours_worked }}</td>
                             <td>{{ $user->first_name }}</td>
                             <td>{{ $user->last_name }}</td>
                             <td>{{ $user->department }}</td>
